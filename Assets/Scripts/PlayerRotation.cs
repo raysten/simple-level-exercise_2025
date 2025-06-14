@@ -31,6 +31,11 @@ public class PlayerRotation : MonoBehaviour
     private void Update()
     {
         _mouseInput = _lookInputAction.ReadValue<Vector2>();
-        transform.Rotate(Vector3.up, _mouseInput.x * _mouseSensitivity * Time.deltaTime);
+    }
+
+    private void FixedUpdate()
+    {
+        var deltaRotation = Quaternion.Euler(0f, _mouseInput.x * _mouseSensitivity * Time.fixedDeltaTime, 0f);
+        _rigidbody.MoveRotation(_rigidbody.rotation * deltaRotation);
     }
 }
