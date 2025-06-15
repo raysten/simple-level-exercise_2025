@@ -12,6 +12,7 @@ namespace PlayerStateMachine
         public override void StateEntered()
         {
             Debug.LogError("PlayerGroundedState: Entered");
+            _playerFacade.PlayerVerticalMovement.DeactivateGravity();
         }
 
         public override void UpdateState()

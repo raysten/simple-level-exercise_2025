@@ -30,12 +30,26 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        var moveInput = new Vector3(PlayerInput.MovementInput.x, 0, PlayerInput.MovementInput.y).normalized;
-        var movementDelta = transform.TransformDirection(moveInput) * (_movementSpeed * Time.fixedDeltaTime);
+        var movePosition = _playerFacade.Rigidbody.position;
+        
+        var horizontalMoveInput = new Vector3(PlayerInput.MovementInput.x, 0, PlayerInput.MovementInput.y).normalized;
+        var horizontalMovementDelta = transform.TransformDirection(horizontalMoveInput) * (_movementSpeed * Time.fixedDeltaTime);
+        var hasHorizontalMovement = horizontalMovementDelta.magnitude > 0f;
 
-        if (movementDelta.magnitude > 0f)
+        if (hasHorizontalMovement)
         {
-            var movePosition = _wallCollisions.FindMovePositionWithCollideAndSlide(movementDelta);
+            movePosition = _wallCollisions.FindMovePositionWithCollideAndSlide(horizontalMovementDelta);
+        }
+
+        var isGravityActive = _playerFacade.PlayerVerticalMovement.IsGravityActive;
+
+        if (isGravityActive)
+        {
+            movePosition += _playerFacade.PlayerVerticalMovement.VerticalMovement * Time.fixedDeltaTime;
+        }
+
+        if (hasHorizontalMovement || isGravityActive)
+        {
             _playerFacade.Rigidbody.MovePosition(movePosition);
         }
     }

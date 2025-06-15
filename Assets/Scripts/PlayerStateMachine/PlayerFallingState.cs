@@ -12,6 +12,7 @@ namespace PlayerStateMachine
         public override void StateEntered()
         {
             Debug.LogError("PlayerFallingState: Entered");
+            _playerFacade.PlayerVerticalMovement.ActivateGravity();
         }
 
         public override void UpdateState()

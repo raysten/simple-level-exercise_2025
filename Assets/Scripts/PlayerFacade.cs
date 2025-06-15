@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class PlayerFacade : MonoBehaviour
 {
@@ -13,6 +14,9 @@ public class PlayerFacade : MonoBehaviour
 
     [SerializeField]
     private PlayerInput _playerInput;
+    
+    [SerializeField]
+    private PlayerVerticalMovement _playerVerticalMovement;
 
     public Rigidbody Rigidbody => _rigidbody;
 
@@ -22,11 +26,14 @@ public class PlayerFacade : MonoBehaviour
 
     public PlayerInput PlayerInput => _playerInput;
 
+    public PlayerVerticalMovement PlayerVerticalMovement => _playerVerticalMovement;
+
     private void Reset()
     {
         _rigidbody = GetComponent<Rigidbody>();
         _capsuleCollider = GetComponent<CapsuleCollider>();
         _playerGroundCheck = GetComponent<PlayerGroundCheck>();
         _playerInput = GetComponent<PlayerInput>();
+        _playerVerticalMovement = GetComponent<PlayerVerticalMovement>();
     }
 }
