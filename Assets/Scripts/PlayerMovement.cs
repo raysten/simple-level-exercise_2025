@@ -12,7 +12,10 @@ public class PlayerMovement : MonoBehaviour
     private LayerMask _collisionMask;
 
     [SerializeField]
-    private float _movementSpeed = 10f;
+    private float _horizontalSpeed = 10f;
+
+    [SerializeField]
+    private float _horizontalSpeedMultiplierWhenFalling = 0.2f;
     
     private WallCollisions _wallCollisions;
 
@@ -28,30 +31,49 @@ public class PlayerMovement : MonoBehaviour
         _wallCollisions = new WallCollisions(transform, _playerFacade.CapsuleCollider, _collisionMask);
     }
 
-    // @todo: refactor
     private void FixedUpdate()
     {
-        var movePosition = _playerFacade.Rigidbody.position;
+        var movementVector = Vector3.zero;
+        movementVector += CalculateHorizontalMovement();
+        movementVector += CalculateVerticalMovement();
+
+        if (movementVector != Vector3.zero)
+        {
+            _playerFacade.Rigidbody.MovePosition(_playerFacade.Rigidbody.position + movementVector);
+        }
+    }
+
+    private Vector3 CalculateHorizontalMovement()
+    {
+        var horizontalMovement = Vector3.zero;
         
         var horizontalMoveInput = new Vector3(PlayerInput.MovementInput.x, 0, PlayerInput.MovementInput.y).normalized;
-        var horizontalMovementDelta = transform.TransformDirection(horizontalMoveInput) * (_movementSpeed * Time.fixedDeltaTime);
+        var horizontalMovementDelta = transform.TransformDirection(horizontalMoveInput) * (_horizontalSpeed * Time.fixedDeltaTime);
+
+        if (_playerFacade.PlayerVerticalMovement.IsGravityActive)
+        {
+            horizontalMovementDelta *= _horizontalSpeedMultiplierWhenFalling;
+        }
+        
         var hasHorizontalMovement = horizontalMovementDelta.magnitude > 0f;
 
         if (hasHorizontalMovement)
         {
-            movePosition = _wallCollisions.FindMovePositionWithCollideAndSlide(horizontalMovementDelta);
+            horizontalMovement = _wallCollisions.CalculateMovementWithCollideAndSlide(horizontalMovementDelta);
         }
 
-        var hasVerticalMovement = _playerFacade.PlayerVerticalMovement.ShouldApplyVerticalMovement;
+        return horizontalMovement;
+    }
 
-        if (hasVerticalMovement)
+    private Vector3 CalculateVerticalMovement()
+    {
+        var verticalMovement = Vector3.zero;
+
+        if (_playerFacade.PlayerVerticalMovement.ShouldApplyVerticalMovement)
         {
-            movePosition += _playerFacade.PlayerVerticalMovement.VerticalMovement * Time.fixedDeltaTime;
+            verticalMovement += _playerFacade.PlayerVerticalMovement.VerticalMovement * Time.fixedDeltaTime;
         }
 
-        if (hasHorizontalMovement || hasVerticalMovement)
-        {
-            _playerFacade.Rigidbody.MovePosition(movePosition);
-        }
+        return verticalMovement;
     }
 }

@@ -2,7 +2,10 @@
 
 public class PlayerVerticalMovement : MonoBehaviour
 {
-    private const float GRAVITY = -10f;
+    private const float MIN_VELOCITY = 0.01f;
+
+    [SerializeField]
+    private float _gravity = -14f;
 
     [SerializeField]
     private float _jumpForce = 6f;
@@ -10,8 +13,9 @@ public class PlayerVerticalMovement : MonoBehaviour
     private bool _isGravityActive;
     private float _velocity;
 
-    public bool ShouldApplyVerticalMovement => Mathf.Abs(_velocity) > 0.01f;
+    public bool ShouldApplyVerticalMovement => Mathf.Abs(_velocity) > MIN_VELOCITY;
     public Vector3 VerticalMovement => Vector3.up * _velocity;
+    public bool IsGravityActive => _isGravityActive;
     
     private void FixedUpdate()
     {
@@ -22,7 +26,7 @@ public class PlayerVerticalMovement : MonoBehaviour
     {
         if (_isGravityActive)
         {
-            _velocity += GRAVITY * Time.deltaTime;
+            _velocity += _gravity * Time.deltaTime;
         }
     }
 

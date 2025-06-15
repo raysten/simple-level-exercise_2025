@@ -17,7 +17,7 @@ public class WallCollisions
         _capsuleCollider = capsuleCollider;
     }
 
-    public Vector3 FindMovePositionWithCollideAndSlide(Vector3 movementDelta)
+    public Vector3 CalculateMovementWithCollideAndSlide(Vector3 movementDelta)
     {
         var currentPosition = _transform.position;
 
@@ -41,7 +41,7 @@ public class WallCollisions
             }
         }
 
-        return currentPosition;
+        return currentPosition - _transform.position;
 
         Vector3 MoveUpToWall(float distanceToCollision)
         {
