@@ -2,25 +2,33 @@
 
 public class PlayerVerticalMovement : MonoBehaviour
 {
-    private const float GRAVITY = -9.81f;
+    private const float GRAVITY = -10f;
+
+    [SerializeField]
+    private float _jumpForce = 6f;
 
     private bool _isGravityActive;
-    private float _jumpValue;
+    private float _velocity;
 
-    public Vector3 VerticalMovement => _isGravityActive ? Vector3.up * (GRAVITY + _jumpValue) : Vector3.zero;
-    public bool IsGravityActive => _isGravityActive;
+    public bool ShouldApplyVerticalMovement => Mathf.Abs(_velocity) > 0.01f;
+    public Vector3 VerticalMovement => Vector3.up * _velocity;
     
-    private void Update()
+    private void FixedUpdate()
     {
-        if (_jumpValue > 0f)
+        ApplyGravity();
+    }
+
+    private void ApplyGravity()
+    {
+        if (_isGravityActive)
         {
-            _jumpValue -= Mathf.Max(0f, _jumpValue - GRAVITY);
+            _velocity += GRAVITY * Time.deltaTime;
         }
     }
 
-    public void AddJump(float jumpVelocity)
+    public void Jump()
     {
-        _jumpValue += jumpVelocity;
+        _velocity = _jumpForce;
     }
 
     public void ActivateGravity()
@@ -30,6 +38,7 @@ public class PlayerVerticalMovement : MonoBehaviour
 
     public void DeactivateGravity()
     {
+        _velocity = 0f;
         _isGravityActive = false;
     }
 }

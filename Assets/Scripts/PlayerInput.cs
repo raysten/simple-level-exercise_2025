@@ -12,9 +12,11 @@ public class PlayerInput : MonoBehaviour
     private Vector2 _movementInput;
     private InputAction _lookInputAction;
     private Vector2 _mouseInput;
+    private InputAction _jumpInputAction;
 
     public Vector2 MovementInput => _movementInput;
     public Vector2 MouseInput => _mouseInput;
+    public bool IsJumpPressed { get; private set; }
     
     private void OnEnable()
     {
@@ -24,12 +26,14 @@ public class PlayerInput : MonoBehaviour
     {
         _moveInputAction = InputSystem.actions.FindAction("Move");
         _lookInputAction = InputSystem.actions.FindAction("Look");
+        _jumpInputAction = InputSystem.actions.FindAction("Jump");
     }
     
     private void Update()
     {
         _movementInput = _moveInputAction.ReadValue<Vector2>();
         _mouseInput = _lookInputAction.ReadValue<Vector2>();
+        IsJumpPressed = _jumpInputAction.triggered;
     }
     
     private void OnDisable()

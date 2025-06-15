@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerFacade : MonoBehaviour
 {
@@ -14,7 +13,7 @@ public class PlayerFacade : MonoBehaviour
 
     [SerializeField]
     private PlayerInput _playerInput;
-    
+
     [SerializeField]
     private PlayerVerticalMovement _playerVerticalMovement;
 

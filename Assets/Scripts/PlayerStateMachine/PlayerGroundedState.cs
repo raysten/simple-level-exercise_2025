@@ -16,7 +16,12 @@ namespace PlayerStateMachine
         }
 
         public override void UpdateState()
-        { }
+        {
+            if (_playerFacade.PlayerInput.IsJumpPressed)
+            {
+                _playerFacade.PlayerVerticalMovement.Jump();
+            }
+        }
 
         public override void StateExited()
         {

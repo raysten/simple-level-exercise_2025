@@ -28,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
         _wallCollisions = new WallCollisions(transform, _playerFacade.CapsuleCollider, _collisionMask);
     }
 
+    // @todo: refactor
     private void FixedUpdate()
     {
         var movePosition = _playerFacade.Rigidbody.position;
@@ -41,14 +42,14 @@ public class PlayerMovement : MonoBehaviour
             movePosition = _wallCollisions.FindMovePositionWithCollideAndSlide(horizontalMovementDelta);
         }
 
-        var isGravityActive = _playerFacade.PlayerVerticalMovement.IsGravityActive;
+        var hasVerticalMovement = _playerFacade.PlayerVerticalMovement.ShouldApplyVerticalMovement;
 
-        if (isGravityActive)
+        if (hasVerticalMovement)
         {
             movePosition += _playerFacade.PlayerVerticalMovement.VerticalMovement * Time.fixedDeltaTime;
         }
 
-        if (hasHorizontalMovement || isGravityActive)
+        if (hasHorizontalMovement || hasVerticalMovement)
         {
             _playerFacade.Rigidbody.MovePosition(movePosition);
         }
