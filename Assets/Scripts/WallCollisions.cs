@@ -6,9 +6,9 @@ public class WallCollisions
     private const int MAX_ITERATIONS = 5;
     private const float MIN_MOVEMENT_DELTA = 0.001f;
 
-    private CapsuleCollider _capsuleCollider;
-    private Transform _transform;
-    private LayerMask _collisionMask;
+    private readonly CapsuleCollider _capsuleCollider;
+    private readonly Transform _transform;
+    private readonly LayerMask _collisionMask;
 
     public WallCollisions(Transform transform, CapsuleCollider capsuleCollider, LayerMask collisionMask)
     {
@@ -23,10 +23,10 @@ public class WallCollisions
 
         for (var i = 0; i < MAX_ITERATIONS && movementDelta.magnitude >= MIN_MOVEMENT_DELTA; i++)
         {
-            if (CapsuleCast(currentPosition, movementDelta, out var hit))
+            if (CapsuleCast(movementDelta, out var hit))
             {
                 var distanceToCollision = hit.distance - SKIN_WIDTH;
-                
+
                 if (distanceToCollision > 0f)
                 {
                     currentPosition = MoveUpToWall(distanceToCollision);
@@ -55,23 +55,18 @@ public class WallCollisions
         }
     }
 
-    private bool CapsuleCast(Vector3 from, Vector3 direction, out RaycastHit hit)
+    private bool CapsuleCast(Vector3 direction, out RaycastHit hit)
     {
         var radius = _capsuleCollider.radius;
-        var height = Mathf.Max(_capsuleCollider.height, radius * 2f);
+        var height = _capsuleCollider.height;
         var up = _transform.up;
 
-        var center = from + _transform.rotation * _capsuleCollider.center;
+        var center = _transform.TransformPoint(_capsuleCollider.center);
         var point1 = center + up * (height / 2f - radius);
         var point2 = center - up * (height / 2f - radius);
 
-        return Physics.CapsuleCast(
-                                   point1, point2, radius,
-                                   direction.normalized,
-                                   out hit,
-                                   direction.magnitude + SKIN_WIDTH,
-                                   _collisionMask,
-                                   QueryTriggerInteraction.Ignore
-                                  );
+        return Physics.CapsuleCast(point1, point2, radius, direction.normalized, out hit, 
+                                   direction.magnitude + SKIN_WIDTH, _collisionMask,
+                                   QueryTriggerInteraction.Ignore);
     }
 }
