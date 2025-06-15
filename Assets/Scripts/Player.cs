@@ -15,14 +15,20 @@ public class Player : MonoBehaviour
     private Rigidbody _rigidbody;
 
     [SerializeField]
+    private CapsuleCollider _capsuleCollider;
+
+    [SerializeField]
+    private float _skinWidth = 0.05f;
+    
+    [SerializeField]
+    private LayerMask _collisionMask;
+
+    [SerializeField]
     private float _movementSpeed = 10f;
 
     private InputAction _moveInputAction;
     private Vector2 _movementInput;
-    private Vector3 _collisionMovement;
-    private Vector3 _collisionNormal;
-    private Collision _currentCollision;
-    private List<Vector3> _normals = new();
+    private WallCollisions _wallCollisions;
 
     private void OnEnable()
     {
@@ -32,6 +38,7 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         _moveInputAction = InputSystem.actions.FindAction("Move");
+        _wallCollisions = new WallCollisions(transform, _capsuleCollider, _collisionMask);
     }
 
     private void Update()
@@ -41,75 +48,14 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        var forwardDelta = _movementInput.y;
-        var rightDelta = _movementInput.x;
+        var moveInput = new Vector3(_movementInput.x, 0, _movementInput.y).normalized;
+        var movementDelta = transform.TransformDirection(moveInput) * (_movementSpeed * Time.fixedDeltaTime);
         
-        var movementDelta = (transform.forward * forwardDelta + transform.right * rightDelta).normalized;
-        
-        // Debug.DrawRay(transform.position, movementDelta, Color.blue, 1f);
-
-        // if (_movementInput.sqrMagnitude > 0f && _collisionNormal != Vector3.zero)
-        // {
-        //     var isMovingIntoWall = Vector3.Dot(movementDelta, _collisionNormal) < 0f;
-        //
-        //     if (isMovingIntoWall)
-        //     {
-        //         movementDelta = Vector3.ProjectOnPlane(movementDelta, _collisionNormal).normalized;
-        //     }
-        // }
-
-        if (_movementInput.sqrMagnitude > 0f && _normals.Any())
+        if (movementDelta.magnitude > 0f)
         {
-            // Debug.LogError($"collision contacts: {_currentCollision.contactCount}");
-            foreach (var normal in _normals)
-            {
-                if (normal != Vector3.zero)
-                {
-                    var isMovingIntoWall = Vector3.Dot(movementDelta, normal) < 0f;
-        
-                    if (isMovingIntoWall)
-                    {
-                        movementDelta = Vector3.ProjectOnPlane(movementDelta, normal).normalized;
-                        // break;
-                    }
-                }
-            }
+            var movePosition = _wallCollisions.FindMovePositionWithCollideAndSlide(movementDelta);
+            _rigidbody.MovePosition(movePosition);
         }
-        
-        // Debug.DrawRay(transform.position, movementDelta, Color.black, 1f);
-
-        _rigidbody.MovePosition(_rigidbody.position + movementDelta * (_movementSpeed * Time.fixedDeltaTime));
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        _collisionMovement = Vector3.zero;
-        _collisionNormal = Vector3.zero;
-        _currentCollision = collision;
-        
-        // Debug.LogError($"contacts count: {collision.contacts.Length}");
-        // foreach (var contactPoint in collision.contacts)
-        // {
-        //     // _collisionMovement += new Vector3(transform.position.x, 0f, transform.position.z) - new Vector3(contactPoint.point.x, 0f, contactPoint.point.z);
-        //     
-        //     _collisionNormal += contactPoint.normal;
-        // }
-        //
-        // _collisionNormal = _collisionNormal.normalized;
-
-        var contactPoint = collision.contacts[0];
-        _collisionNormal = contactPoint.normal;
-        
-        _normals.Clear();
-        _normals.AddRange(collision.contacts.Select(c => c.normal));
-    }
-
-    private void OnCollisionExit(Collision other)
-    {
-        _collisionMovement = Vector3.zero;
-        _collisionNormal = Vector3.zero;
-        _currentCollision = null;
-        _normals.Clear();
     }
 
     private void OnDisable()
