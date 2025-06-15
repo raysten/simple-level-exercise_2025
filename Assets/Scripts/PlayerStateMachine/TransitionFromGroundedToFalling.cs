@@ -20,7 +20,7 @@ namespace PlayerStateMachine
 
                 if (canChange)
                 {
-                    newState = new PlayerFallingState();
+                    newState = new PlayerFallingState(playerFacade);
                 }
             }
 

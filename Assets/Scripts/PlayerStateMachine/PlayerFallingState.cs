@@ -4,6 +4,9 @@ namespace PlayerStateMachine
 {
     public class PlayerFallingState : PlayerStateBase
     {
+        public PlayerFallingState(PlayerFacade playerFacade) : base(playerFacade)
+        { }
+
         public override EPlayerState State => EPlayerState.Falling;
 
         public override void StateEntered()

@@ -20,7 +20,7 @@ namespace PlayerStateMachine
 
                 if (canChange)
                 {
-                    newState = new PlayerGroundedState();
+                    newState = new PlayerGroundedState(playerFacade);
                 }
             }
 

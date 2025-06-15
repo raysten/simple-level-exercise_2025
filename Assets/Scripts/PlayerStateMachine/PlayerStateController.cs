@@ -20,7 +20,7 @@ namespace PlayerStateMachine
 
         private void Awake()
         {
-            _currentState = new PlayerGroundedState();
+            _currentState = new PlayerGroundedState(_playerFacade);
         }
 
         private void Update()
