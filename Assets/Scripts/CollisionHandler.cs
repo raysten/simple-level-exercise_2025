@@ -33,12 +33,12 @@ public class CollisionHandler
 
                 if (distanceToCollision > SKIN_WIDTH)
                 {
-                    currentPosition = MoveUpToWall(distanceToCollision);
+                    currentPosition = MoveUpToCollision(distanceToCollision);
                 }
 
                 if (isVerticalMovement)
                 {
-                    if (ShouldStandOnSlope(hit))
+                    if (IsGroundOrSmallSlope(hit))
                     {
                         _playerGrounded.ChangeIsGrounded(true);
                         break;
@@ -49,7 +49,7 @@ public class CollisionHandler
                     }
                 }
                 
-                movementDelta = FindRemainingMovementDeltaAlongWall(hit);
+                movementDelta = FindRemainingMovementDeltaAlongCollisionSurface(hit);
             }
             else
             {
@@ -66,13 +66,13 @@ public class CollisionHandler
 
         return currentPosition - _transform.position;
 
-        Vector3 MoveUpToWall(float distanceToCollision)
+        Vector3 MoveUpToCollision(float distanceToCollision)
         {
             currentPosition += movementDelta.normalized * distanceToCollision;
             return currentPosition;
         }
 
-        Vector3 FindRemainingMovementDeltaAlongWall(RaycastHit hit)
+        Vector3 FindRemainingMovementDeltaAlongCollisionSurface(RaycastHit hit)
         {
             return Vector3.ProjectOnPlane(movementDelta, hit.normal);
         }
@@ -93,7 +93,7 @@ public class CollisionHandler
                                    QueryTriggerInteraction.Ignore);
     }
 
-    private bool ShouldStandOnSlope(RaycastHit hit)
+    private bool IsGroundOrSmallSlope(RaycastHit hit)
     {
         var angle = Vector3.Angle(Vector3.up, hit.normal);
         Debug.LogError(angle);

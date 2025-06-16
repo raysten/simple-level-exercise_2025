@@ -20,7 +20,7 @@ public class PlayerGrounded : MonoBehaviour
 
     private void Awake()
     {
-        ChangeIsGrounded(CheckIsGrounded());
+        // ChangeIsGrounded(CheckIsGrounded());
     }
 
     private bool CheckIsGrounded()
