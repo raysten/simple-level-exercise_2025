@@ -1,16 +1,16 @@
 ﻿using UnityEngine;
 
-public class WallCollisions
+public class CollisionHandler
 {
     private const float SKIN_WIDTH = 0.05f;
-    private const int MAX_ITERATIONS = 5;
+    private const int MAX_ITERATIONS = 10;
     private const float MIN_MOVEMENT_DELTA = 0.001f;
 
     private readonly CapsuleCollider _capsuleCollider;
     private readonly Transform _transform;
     private readonly LayerMask _collisionMask;
 
-    public WallCollisions(Transform transform, CapsuleCollider capsuleCollider, LayerMask collisionMask)
+    public CollisionHandler(Transform transform, CapsuleCollider capsuleCollider, LayerMask collisionMask)
     {
         _collisionMask = collisionMask;
         _transform = transform;
@@ -27,7 +27,7 @@ public class WallCollisions
             {
                 var distanceToCollision = hit.distance - SKIN_WIDTH;
 
-                if (distanceToCollision > 0f)
+                if (distanceToCollision > SKIN_WIDTH)
                 {
                     currentPosition = MoveUpToWall(distanceToCollision);
                 }

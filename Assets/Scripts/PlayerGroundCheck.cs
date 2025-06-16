@@ -2,6 +2,9 @@
 
 public class PlayerGroundCheck : MonoBehaviour
 {
+    private const float SPHERE_RADIUS = 0.5f;
+    private const float OFFSET = 0.05f;
+    
     [SerializeField]
     private CapsuleCollider _capsuleCollider;
 
@@ -10,8 +13,13 @@ public class PlayerGroundCheck : MonoBehaviour
 
     public bool IsGrounded()
     {
-        var groundCheckDistance = _capsuleCollider.height / 2f;
-
-        return Physics.Raycast(transform.position, -transform.up, groundCheckDistance, _collisionMask);
+        var groundCheckDistance = _capsuleCollider.height / 2f - SPHERE_RADIUS;
+        
+        return Physics.SphereCast(transform.position, 
+                                  SPHERE_RADIUS + OFFSET, 
+                                  -transform.up,
+                                  out _,
+                                  groundCheckDistance, 
+                                  _collisionMask);
     }
 }

@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private float _horizontalSpeedMultiplierWhenFalling = 0.2f;
     
-    private WallCollisions _wallCollisions;
+    private CollisionHandler _collisionHandler;
 
     private PlayerInput PlayerInput => _playerFacade.PlayerInput;
 
@@ -28,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        _wallCollisions = new WallCollisions(transform, _playerFacade.CapsuleCollider, _collisionMask);
+        _collisionHandler = new CollisionHandler(transform, _playerFacade.CapsuleCollider, _collisionMask);
     }
 
     private void FixedUpdate()
@@ -39,14 +39,13 @@ public class PlayerMovement : MonoBehaviour
 
         if (movementVector != Vector3.zero)
         {
+            movementVector = _collisionHandler.CalculateMovementWithCollideAndSlide(movementVector);
             _playerFacade.Rigidbody.MovePosition(_playerFacade.Rigidbody.position + movementVector);
         }
     }
 
     private Vector3 CalculateHorizontalMovement()
     {
-        var horizontalMovement = Vector3.zero;
-        
         var horizontalMoveInput = new Vector3(PlayerInput.MovementInput.x, 0, PlayerInput.MovementInput.y).normalized;
         var horizontalMovementDelta = transform.TransformDirection(horizontalMoveInput) * (_horizontalSpeed * Time.fixedDeltaTime);
 
@@ -54,15 +53,8 @@ public class PlayerMovement : MonoBehaviour
         {
             horizontalMovementDelta *= _horizontalSpeedMultiplierWhenFalling;
         }
-        
-        var hasHorizontalMovement = horizontalMovementDelta.magnitude > 0f;
 
-        if (hasHorizontalMovement)
-        {
-            horizontalMovement = _wallCollisions.CalculateMovementWithCollideAndSlide(horizontalMovementDelta);
-        }
-
-        return horizontalMovement;
+        return horizontalMovementDelta;
     }
 
     private Vector3 CalculateVerticalMovement()
