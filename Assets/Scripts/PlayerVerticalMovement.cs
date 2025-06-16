@@ -26,7 +26,7 @@ public class PlayerVerticalMovement : MonoBehaviour
     {
         if (_isGravityActive)
         {
-            _velocity += _gravity * Time.deltaTime;
+            _velocity = Mathf.Max(_velocity + _gravity * Time.deltaTime);
         }
     }
 
@@ -42,7 +42,7 @@ public class PlayerVerticalMovement : MonoBehaviour
 
     public void DeactivateGravity()
     {
-        _velocity = 0f;
+        _velocity = -0.1f;
         _isGravityActive = false;
     }
 }

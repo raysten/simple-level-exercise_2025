@@ -39,7 +39,6 @@ public class PlayerMovement : MonoBehaviour
 
         if (movementVector != Vector3.zero)
         {
-            movementVector = _collisionHandler.CalculateMovementWithCollideAndSlide(movementVector);
             _playerFacade.Rigidbody.MovePosition(_playerFacade.Rigidbody.position + movementVector);
         }
     }
@@ -54,6 +53,8 @@ public class PlayerMovement : MonoBehaviour
             horizontalMovementDelta *= _horizontalSpeedMultiplierWhenFalling;
         }
 
+        horizontalMovementDelta = _collisionHandler.CalculateMovementWithCollideAndSlide(horizontalMovementDelta);
+
         return horizontalMovementDelta;
     }
 
@@ -64,6 +65,7 @@ public class PlayerMovement : MonoBehaviour
         if (_playerFacade.PlayerVerticalMovement.ShouldApplyVerticalMovement)
         {
             verticalMovement += _playerFacade.PlayerVerticalMovement.VerticalMovement * Time.fixedDeltaTime;
+            verticalMovement = _collisionHandler.CalculateMovementWithCollideAndSlide(verticalMovement, true, _playerFacade.PlayerGroundCheck);
         }
 
         return verticalMovement;

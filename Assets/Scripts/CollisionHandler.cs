@@ -5,6 +5,7 @@ public class CollisionHandler
     private const float SKIN_WIDTH = 0.05f;
     private const int MAX_ITERATIONS = 10;
     private const float MIN_MOVEMENT_DELTA = 0.001f;
+    private const float MAX_SLOPE_ANGLE = 40f;
 
     private readonly CapsuleCollider _capsuleCollider;
     private readonly Transform _transform;
@@ -17,7 +18,7 @@ public class CollisionHandler
         _capsuleCollider = capsuleCollider;
     }
 
-    public Vector3 CalculateMovementWithCollideAndSlide(Vector3 movementDelta)
+    public Vector3 CalculateMovementWithCollideAndSlide(Vector3 movementDelta, bool isVerticalMovement = false, PlayerGroundCheck groundCheck = null)
     {
         var currentPosition = _transform.position;
 
@@ -32,11 +33,30 @@ public class CollisionHandler
                     currentPosition = MoveUpToWall(distanceToCollision);
                 }
 
+                if (isVerticalMovement)
+                {
+                    if (ShouldStandOnSlope(hit))
+                    {
+                        groundCheck.ChangeIsGrounded(true);
+                        break;
+                    }
+                    else
+                    {
+                        groundCheck.ChangeIsGrounded(false);
+                    }
+                }
+                
                 movementDelta = FindRemainingMovementDeltaAlongWall(hit);
             }
             else
             {
                 currentPosition += movementDelta;
+
+                if (isVerticalMovement)
+                {
+                    groundCheck.ChangeIsGrounded(false);
+                }
+                
                 break;
             }
         }
@@ -68,5 +88,13 @@ public class CollisionHandler
         return Physics.CapsuleCast(point1, point2, radius, direction.normalized, out hit, 
                                    direction.magnitude + SKIN_WIDTH, _collisionMask,
                                    QueryTriggerInteraction.Ignore);
+    }
+
+    private bool ShouldStandOnSlope(RaycastHit hit)
+    {
+        var angle = Vector3.Angle(Vector3.up, hit.normal);
+        Debug.LogError(angle);
+
+        return angle <= MAX_SLOPE_ANGLE;
     }
 }

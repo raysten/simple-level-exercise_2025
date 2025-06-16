@@ -1,21 +1,44 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class PlayerGroundCheck : MonoBehaviour
 {
     private const float SPHERE_RADIUS = 0.5f;
     private const float OFFSET = 0.05f;
-    
+
     [SerializeField]
-    private CapsuleCollider _capsuleCollider;
+    private PlayerFacade _playerFacade;
 
     [SerializeField]
     private LayerMask _collisionMask;
 
-    public bool IsGrounded()
+    public bool IsGrounded { get; private set; }
+
+    private void Reset()
     {
-        var groundCheckDistance = _capsuleCollider.height / 2f - SPHERE_RADIUS;
-        
+        _playerFacade = GetComponent<PlayerFacade>();
+    }
+
+    private void Awake()
+    {
+        ChangeIsGrounded(CheckIsGrounded());
+    }
+
+    // private void FixedUpdate()
+    // {
+    //     IsGrounded = CheckIsGrounded();
+    // }
+
+    private bool CheckIsGrounded()
+    {
+        var groundCheckDistance = _playerFacade.CapsuleCollider.height / 2f - SPHERE_RADIUS;
+
         return Physics.SphereCast(transform.position, SPHERE_RADIUS + OFFSET, -transform.up, out _,
                                   groundCheckDistance, _collisionMask);
+    }
+
+    public void ChangeIsGrounded(bool isGrounded)
+    {
+        IsGrounded = isGrounded;
     }
 }
