@@ -15,11 +15,7 @@ public class PlayerGroundCheck : MonoBehaviour
     {
         var groundCheckDistance = _capsuleCollider.height / 2f - SPHERE_RADIUS;
         
-        return Physics.SphereCast(transform.position, 
-                                  SPHERE_RADIUS + OFFSET, 
-                                  -transform.up,
-                                  out _,
-                                  groundCheckDistance, 
-                                  _collisionMask);
+        return Physics.SphereCast(transform.position, SPHERE_RADIUS + OFFSET, -transform.up, out _,
+                                  groundCheckDistance, _collisionMask);
     }
 }
