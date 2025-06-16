@@ -18,6 +18,7 @@ public class PlayerGrounded : MonoBehaviour
         _playerFacade = GetComponent<PlayerFacade>();
     }
 
+    // @todo: remove unused code
     private void Awake()
     {
         // ChangeIsGrounded(CheckIsGrounded());

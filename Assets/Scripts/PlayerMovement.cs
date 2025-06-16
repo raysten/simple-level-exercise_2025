@@ -34,9 +34,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        var movementVector = Vector3.zero;
-        movementVector += CalculateHorizontalMovement();
-        movementVector += CalculateVerticalMovement();
+        var horizontalMovement = CalculateHorizontalMovement();
+        var movementVector = ApplyVerticalMovement(horizontalMovement);
 
         if (movementVector != Vector3.zero)
         {
@@ -54,15 +53,15 @@ public class PlayerMovement : MonoBehaviour
             horizontalMovementDelta *= _horizontalSpeedMultiplierWhenFalling;
         }
 
-        horizontalMovementDelta = _collisionHandler.CalculateMovementWithCollideAndSlide(horizontalMovementDelta);
+        horizontalMovementDelta = _collisionHandler.CalculateMovementWithCollideAndSlide(horizontalMovementDelta, transform.position);
 
         return horizontalMovementDelta;
     }
 
-    private Vector3 CalculateVerticalMovement()
+    private Vector3 ApplyVerticalMovement(Vector3 horizontalMovement)
     {
         var verticalMovement = _playerFacade.PlayerVerticalMovement.VerticalMovement * Time.fixedDeltaTime;
         
-        return _collisionHandler.CalculateMovementWithCollideAndSlide(verticalMovement, true);
+        return _collisionHandler.CalculateMovementWithCollideAndSlide(verticalMovement, transform.position + horizontalMovement, true);
     }
 }

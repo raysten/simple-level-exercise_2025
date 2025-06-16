@@ -2,7 +2,7 @@
 
 public class CollisionHandler
 {
-    private const float SKIN_WIDTH = 0.05f;
+    private const float SKIN_WIDTH = 0.02f;
     private const int MAX_ITERATIONS = 10;
     private const float MIN_MOVEMENT_DELTA = 0.001f;
     private const float MAX_SLOPE_ANGLE = 40f;
@@ -21,13 +21,12 @@ public class CollisionHandler
         _playerGrounded = playerGrounded;
     }
 
-    public Vector3 CalculateMovementWithCollideAndSlide(Vector3 movementDelta, bool isVerticalMovement = false)
+    public Vector3 CalculateMovementWithCollideAndSlide(
+        Vector3 movementDelta, Vector3 currentPosition, bool isVerticalMovement = false)
     {
-        var currentPosition = _transform.position;
-
         for (var i = 0; i < MAX_ITERATIONS && movementDelta.magnitude >= MIN_MOVEMENT_DELTA; i++)
         {
-            if (CapsuleCast(movementDelta, out var hit))
+            if (DetectCollisionFrom(currentPosition, movementDelta, out var hit))
             {
                 var distanceToCollision = hit.distance - SKIN_WIDTH;
 
@@ -78,16 +77,16 @@ public class CollisionHandler
         }
     }
 
-    private bool CapsuleCast(Vector3 direction, out RaycastHit hit)
+    private bool DetectCollisionFrom(Vector3 currentPosition, Vector3 direction, out RaycastHit hit)
     {
         var radius = _capsuleCollider.radius;
         var height = _capsuleCollider.height;
         var up = _transform.up;
 
-        var center = _transform.TransformPoint(_capsuleCollider.center);
-        var point1 = center + up * (height / 2f - radius);
-        var point2 = center - up * (height / 2f - radius);
-
+        var centerInWorldSpace = currentPosition + _transform.rotation * _capsuleCollider.center;
+        var point1 = centerInWorldSpace + up * (height / 2f - radius);
+        var point2 = centerInWorldSpace - up * (height / 2f - radius);
+        
         return Physics.CapsuleCast(point1, point2, radius, direction.normalized, out hit, 
                                    direction.magnitude + SKIN_WIDTH, _collisionMask,
                                    QueryTriggerInteraction.Ignore);
@@ -96,7 +95,6 @@ public class CollisionHandler
     private bool IsGroundOrSmallSlope(RaycastHit hit)
     {
         var angle = Vector3.Angle(Vector3.up, hit.normal);
-        Debug.LogError(angle);
 
         return angle <= MAX_SLOPE_ANGLE;
     }
