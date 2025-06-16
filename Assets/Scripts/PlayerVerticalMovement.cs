@@ -2,8 +2,8 @@
 
 public class PlayerVerticalMovement : MonoBehaviour
 {
-    private const float MIN_VELOCITY = 0.01f;
-
+    private const float MIN_VELOCITY = 0.1f;
+    
     [SerializeField]
     private float _gravity = -14f;
 
@@ -13,7 +13,6 @@ public class PlayerVerticalMovement : MonoBehaviour
     private bool _isGravityActive;
     private float _velocity;
 
-    public bool ShouldApplyVerticalMovement => Mathf.Abs(_velocity) > MIN_VELOCITY;
     public Vector3 VerticalMovement => Vector3.up * _velocity;
     public bool IsGravityActive => _isGravityActive;
     
@@ -30,11 +29,6 @@ public class PlayerVerticalMovement : MonoBehaviour
         }
     }
 
-    public void Jump()
-    {
-        _velocity = _jumpForce;
-    }
-
     public void ActivateGravity()
     {
         _isGravityActive = true;
@@ -42,7 +36,17 @@ public class PlayerVerticalMovement : MonoBehaviour
 
     public void DeactivateGravity()
     {
-        _velocity = -0.1f;
+        _velocity = -MIN_VELOCITY; // so that CollisionHandler always checks if player is grounded
         _isGravityActive = false;
+    }
+
+    public void Jump()
+    {
+        AddVelocity(_jumpForce);
+    }
+
+    public void AddVelocity(float velocity)
+    {
+        _velocity += velocity;
     }
 }

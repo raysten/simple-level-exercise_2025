@@ -61,14 +61,8 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector3 CalculateVerticalMovement()
     {
-        var verticalMovement = Vector3.zero;
-
-        if (_playerFacade.PlayerVerticalMovement.ShouldApplyVerticalMovement)
-        {
-            verticalMovement += _playerFacade.PlayerVerticalMovement.VerticalMovement * Time.fixedDeltaTime;
-            verticalMovement = _collisionHandler.CalculateMovementWithCollideAndSlide(verticalMovement, true);
-        }
-
-        return verticalMovement;
+        var verticalMovement = _playerFacade.PlayerVerticalMovement.VerticalMovement * Time.fixedDeltaTime;
+        
+        return _collisionHandler.CalculateMovementWithCollideAndSlide(verticalMovement, true);
     }
 }

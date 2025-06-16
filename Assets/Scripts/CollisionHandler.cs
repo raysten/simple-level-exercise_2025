@@ -10,7 +10,7 @@ public class CollisionHandler
     private readonly CapsuleCollider _capsuleCollider;
     private readonly Transform _transform;
     private readonly LayerMask _collisionMask;
-    private PlayerGrounded _playerGrounded;
+    private readonly PlayerGrounded _playerGrounded;
 
     public CollisionHandler(
         Transform transform, CapsuleCollider capsuleCollider, LayerMask collisionMask, PlayerGrounded playerGrounded)
