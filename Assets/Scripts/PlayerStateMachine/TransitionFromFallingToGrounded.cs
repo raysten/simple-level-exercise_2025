@@ -16,7 +16,7 @@ namespace PlayerStateMachine
 
             if (currentState.State == From)
             {
-                canChange = playerFacade.PlayerGroundCheck.IsGrounded;
+                canChange = playerFacade.PlayerGrounded.IsGrounded;
 
                 if (canChange)
                 {

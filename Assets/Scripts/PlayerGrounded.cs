@@ -1,7 +1,6 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class PlayerGroundCheck : MonoBehaviour
+public class PlayerGrounded : MonoBehaviour
 {
     private const float SPHERE_RADIUS = 0.5f;
     private const float OFFSET = 0.05f;
@@ -23,11 +22,6 @@ public class PlayerGroundCheck : MonoBehaviour
     {
         ChangeIsGrounded(CheckIsGrounded());
     }
-
-    // private void FixedUpdate()
-    // {
-    //     IsGrounded = CheckIsGrounded();
-    // }
 
     private bool CheckIsGrounded()
     {

@@ -28,7 +28,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        _collisionHandler = new CollisionHandler(transform, _playerFacade.CapsuleCollider, _collisionMask);
+        _collisionHandler = new CollisionHandler(transform, _playerFacade.CapsuleCollider, _collisionMask,
+                                                 _playerFacade.PlayerGrounded);
     }
 
     private void FixedUpdate()
@@ -65,7 +66,7 @@ public class PlayerMovement : MonoBehaviour
         if (_playerFacade.PlayerVerticalMovement.ShouldApplyVerticalMovement)
         {
             verticalMovement += _playerFacade.PlayerVerticalMovement.VerticalMovement * Time.fixedDeltaTime;
-            verticalMovement = _collisionHandler.CalculateMovementWithCollideAndSlide(verticalMovement, true, _playerFacade.PlayerGroundCheck);
+            verticalMovement = _collisionHandler.CalculateMovementWithCollideAndSlide(verticalMovement, true);
         }
 
         return verticalMovement;

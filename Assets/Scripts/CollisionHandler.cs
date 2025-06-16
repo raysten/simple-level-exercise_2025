@@ -10,15 +10,18 @@ public class CollisionHandler
     private readonly CapsuleCollider _capsuleCollider;
     private readonly Transform _transform;
     private readonly LayerMask _collisionMask;
+    private PlayerGrounded _playerGrounded;
 
-    public CollisionHandler(Transform transform, CapsuleCollider capsuleCollider, LayerMask collisionMask)
+    public CollisionHandler(
+        Transform transform, CapsuleCollider capsuleCollider, LayerMask collisionMask, PlayerGrounded playerGrounded)
     {
         _collisionMask = collisionMask;
         _transform = transform;
         _capsuleCollider = capsuleCollider;
+        _playerGrounded = playerGrounded;
     }
 
-    public Vector3 CalculateMovementWithCollideAndSlide(Vector3 movementDelta, bool isVerticalMovement = false, PlayerGroundCheck groundCheck = null)
+    public Vector3 CalculateMovementWithCollideAndSlide(Vector3 movementDelta, bool isVerticalMovement = false)
     {
         var currentPosition = _transform.position;
 
@@ -37,12 +40,12 @@ public class CollisionHandler
                 {
                     if (ShouldStandOnSlope(hit))
                     {
-                        groundCheck.ChangeIsGrounded(true);
+                        _playerGrounded.ChangeIsGrounded(true);
                         break;
                     }
                     else
                     {
-                        groundCheck.ChangeIsGrounded(false);
+                        _playerGrounded.ChangeIsGrounded(false);
                     }
                 }
                 
@@ -54,7 +57,7 @@ public class CollisionHandler
 
                 if (isVerticalMovement)
                 {
-                    groundCheck.ChangeIsGrounded(false);
+                    _playerGrounded.ChangeIsGrounded(false);
                 }
                 
                 break;
