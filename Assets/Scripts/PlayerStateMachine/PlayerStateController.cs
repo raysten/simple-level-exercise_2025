@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace PlayerStateMachine
@@ -21,6 +22,11 @@ namespace PlayerStateMachine
         private void Awake()
         {
             _currentState = new PlayerGroundedState(_playerFacade);
+        }
+
+        private void FixedUpdate()
+        {
+            _currentState.FixedUpdateState();
         }
 
         private void Update()

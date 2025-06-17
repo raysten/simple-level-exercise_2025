@@ -3,65 +3,52 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField]
-    private PlayerFacade _playerFacade;
+    private Rigidbody _rigidbody;
+    
+    [SerializeField]
+    private CapsuleCollider _capsuleCollider;
 
     [SerializeField]
     private float _skinWidth = 0.05f;
 
     [SerializeField]
     private LayerMask _collisionMask;
-
-    [SerializeField]
-    private float _horizontalSpeed = 10f;
-
-    [SerializeField]
-    private float _horizontalSpeedMultiplierWhenFalling = 0.2f;
     
+    private IGroundedStatus _groundedStatus;
     private CollisionHandler _collisionHandler;
-
-    private PlayerInput PlayerInput => _playerFacade.PlayerInput;
 
     private void Reset()
     {
-        _playerFacade = GetComponent<PlayerFacade>();
+        _rigidbody = GetComponent<Rigidbody>();
+        _capsuleCollider = GetComponent<CapsuleCollider>();
     }
 
     private void Awake()
     {
-        _collisionHandler = new CollisionHandler(transform, _playerFacade.CapsuleCollider, _collisionMask,
-                                                 _playerFacade.PlayerGrounded);
+        _groundedStatus = GetComponent<IGroundedStatus>();
+        _collisionHandler = new CollisionHandler(transform, _capsuleCollider, _collisionMask, _groundedStatus);
     }
 
-    private void FixedUpdate()
+    public void Move(Vector3 horizontalMovement, Vector3 verticalMovement)
     {
-        var horizontalMovement = CalculateHorizontalMovement();
-        var movementVector = ApplyVerticalMovement(horizontalMovement);
-
-        if (movementVector != Vector3.zero)
-        {
-            _playerFacade.Rigidbody.MovePosition(_playerFacade.Rigidbody.position + movementVector);
-        }
-    }
-
-    private Vector3 CalculateHorizontalMovement()
-    {
-        var horizontalMoveInput = new Vector3(PlayerInput.MovementInput.x, 0, PlayerInput.MovementInput.y).normalized;
-        var horizontalMovementDelta = transform.TransformDirection(horizontalMoveInput) * (_horizontalSpeed * Time.fixedDeltaTime);
-
-        if (_playerFacade.PlayerVerticalMovement.IsGravityActive)
-        {
-            horizontalMovementDelta *= _horizontalSpeedMultiplierWhenFalling;
-        }
-
-        horizontalMovementDelta = _collisionHandler.CalculateMovementWithCollideAndSlide(horizontalMovementDelta, transform.position);
-
-        return horizontalMovementDelta;
-    }
-
-    private Vector3 ApplyVerticalMovement(Vector3 horizontalMovement)
-    {
-        var verticalMovement = _playerFacade.PlayerVerticalMovement.VerticalMovement * Time.fixedDeltaTime;
+        var horizontalMovementWithCollisions = CalculateHorizontalMovement(horizontalMovement);
+        var movementVectorWithCollisions = ApplyVerticalMovement(verticalMovement, horizontalMovementWithCollisions);
         
+        if (movementVectorWithCollisions != Vector3.zero)
+        {
+            _rigidbody.MovePosition(_rigidbody.position + movementVectorWithCollisions);
+        }
+    }
+
+    private Vector3 CalculateHorizontalMovement(Vector3 horizontalMovement)
+    {
+        horizontalMovement = _collisionHandler.CalculateMovementWithCollideAndSlide(horizontalMovement, transform.position);
+
+        return horizontalMovement;
+    }
+
+    private Vector3 ApplyVerticalMovement(Vector3 verticalMovement, Vector3 horizontalMovement)
+    {
         return _collisionHandler.CalculateMovementWithCollideAndSlide(verticalMovement, transform.position + horizontalMovement, true);
     }
 }

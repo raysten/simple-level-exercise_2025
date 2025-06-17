@@ -12,6 +12,8 @@
         public abstract EPlayerState State { get; }
         
         public abstract void StateEntered();
+
+        public abstract void FixedUpdateState();
     
         public abstract void UpdateState();
     
