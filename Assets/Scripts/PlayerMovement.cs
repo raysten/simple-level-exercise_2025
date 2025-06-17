@@ -42,6 +42,7 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector3 CalculateHorizontalMovement(Vector3 horizontalMovement)
     {
+        horizontalMovement = transform.TransformDirection(horizontalMovement);
         horizontalMovement = _collisionHandler.CalculateMovementWithCollideAndSlide(horizontalMovement, transform.position);
 
         return horizontalMovement;

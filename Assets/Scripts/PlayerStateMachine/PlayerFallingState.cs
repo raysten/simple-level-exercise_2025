@@ -17,21 +17,18 @@ namespace PlayerStateMachine
 
         public override void FixedUpdateState()
         {
-            var horizontalMovementDelta = CalculateHorizontalMovement();
-
-            var verticalMovementDelta = _playerFacade.PlayerVerticalMovement.VerticalMovement;
+            var horizontalMovement = CalculateHorizontalMovement();
+            var verticalMovement = _playerFacade.PlayerVerticalMovement.VerticalMovement;
             
-            _playerFacade.PlayerMovement.Move(horizontalMovementDelta, verticalMovementDelta);
+            _playerFacade.PlayerMovement.Move(horizontalMovement, verticalMovement);
         }
 
         private Vector3 CalculateHorizontalMovement()
         {
             var horizontalInput = _playerFacade.PlayerInput.HorizontalInput;
-            var horizontalMoveInput = new Vector3(horizontalInput.x, 0, horizontalInput.y).normalized;
             var speed = _playerFacade.PlayerSettings.HorizontalSpeedWhenFalling;
-            var horizontalMovementDelta = _playerFacade.transform.TransformDirection(horizontalMoveInput) * (speed * Time.fixedDeltaTime);
             
-            return horizontalMovementDelta;
+            return horizontalInput * (speed * Time.fixedDeltaTime);
         }
 
         public override void UpdateState()

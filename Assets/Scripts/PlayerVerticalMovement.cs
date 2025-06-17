@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+// @todo: refactor
 public class PlayerVerticalMovement : MonoBehaviour
 {
     private const float MIN_VELOCITY = 0.1f;

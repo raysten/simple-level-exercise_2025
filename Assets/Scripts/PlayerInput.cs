@@ -14,7 +14,8 @@ public class PlayerInput : MonoBehaviour
     private Vector2 _mouseInput;
     private InputAction _jumpInputAction;
 
-    public Vector2 HorizontalInput => _horizontalInput;
+    public Vector2 HorizontalInputRaw => _horizontalInput;
+    public Vector3 HorizontalInput => new Vector3(_horizontalInput.x, 0f, _horizontalInput.y).normalized;
     public Vector2 MouseInput => _mouseInput;
     public bool IsJumpPressed { get; private set; }
     
