@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Player;
 using PlayerStateMachine.States;
 using PlayerStateMachine.Transitions;
 using UnityEngine;

@@ -1,4 +1,5 @@
-﻿using PlayerStateMachine.States;
+﻿using Player;
+using PlayerStateMachine.States;
 using UnityEngine;
 
 namespace PlayerStateMachine.Transitions
