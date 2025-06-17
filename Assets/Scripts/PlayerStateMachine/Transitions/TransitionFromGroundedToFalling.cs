@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using PlayerStateMachine.States;
+using UnityEngine;
 
-namespace PlayerStateMachine
+namespace PlayerStateMachine.Transitions
 {
     [CreateAssetMenu(fileName = nameof(TransitionFromGroundedToFalling),
                      menuName = "Player/StateTransitions/" + nameof(TransitionFromGroundedToFalling))]

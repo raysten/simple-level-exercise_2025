@@ -1,18 +1,18 @@
 ﻿using UnityEngine;
 
-namespace PlayerStateMachine
+namespace PlayerStateMachine.States
 {
-    public class PlayerFallingState : PlayerStateBase
+    public class PlayerGroundedState : PlayerStateBase
     {
-        public PlayerFallingState(PlayerFacade playerFacade) : base(playerFacade)
+        public override EPlayerState State => EPlayerState.Grounded;
+        
+        public PlayerGroundedState(PlayerFacade playerFacade) : base(playerFacade)
         { }
-
-        public override EPlayerState State => EPlayerState.Falling;
 
         public override void StateEntered()
         {
-            Debug.LogError("PlayerFallingState: Entered");
-            _playerFacade.PlayerVerticalMovement.ActivateGravity();
+            Debug.LogError("PlayerGroundedState: Entered");
+            _playerFacade.PlayerVerticalMovement.DeactivateGravity();
         }
 
         public override void FixedUpdateState()
@@ -26,19 +26,22 @@ namespace PlayerStateMachine
         private Vector3 CalculateHorizontalMovement()
         {
             var horizontalInput = _playerFacade.PlayerInput.HorizontalInput;
-            var speed = _playerFacade.PlayerSettings.HorizontalSpeedWhenFalling;
+            var speed = _playerFacade.PlayerSettings.HorizontalMoveSpeed;
             
             return horizontalInput * (speed * Time.fixedDeltaTime);
         }
 
         public override void UpdateState()
         {
-            
+            if (_playerFacade.PlayerInput.IsJumpPressed)
+            {
+                _playerFacade.PlayerVerticalMovement.Jump();
+            }
         }
 
         public override void StateExited()
         {
-            Debug.LogError("PlayerFallingState: Exited");
+            Debug.LogError("PlayerGroundedState: Exited");
         }
     }
 }
