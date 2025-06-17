@@ -10,15 +10,15 @@ public class CollisionHandler
     private readonly CapsuleCollider _capsuleCollider;
     private readonly Transform _transform;
     private readonly LayerMask _collisionMask;
-    private readonly PlayerGrounded _playerGrounded;
+    private readonly IGroundedStatus _groundedStatus;
 
     public CollisionHandler(
-        Transform transform, CapsuleCollider capsuleCollider, LayerMask collisionMask, PlayerGrounded playerGrounded)
+        Transform transform, CapsuleCollider capsuleCollider, LayerMask collisionMask, IGroundedStatus groundedStatus)
     {
         _collisionMask = collisionMask;
         _transform = transform;
         _capsuleCollider = capsuleCollider;
-        _playerGrounded = playerGrounded;
+        _groundedStatus = groundedStatus;
     }
 
     public Vector3 CalculateMovementWithCollideAndSlide(
@@ -39,12 +39,12 @@ public class CollisionHandler
                 {
                     if (IsGroundOrSmallSlope(hit))
                     {
-                        _playerGrounded.ChangeIsGrounded(true);
+                        _groundedStatus.ChangeIsGrounded(true);
                         break;
                     }
                     else
                     {
-                        _playerGrounded.ChangeIsGrounded(false);
+                        _groundedStatus.ChangeIsGrounded(false);
                     }
                 }
                 
@@ -56,7 +56,7 @@ public class CollisionHandler
 
                 if (isVerticalMovement)
                 {
-                    _playerGrounded.ChangeIsGrounded(false);
+                    _groundedStatus.ChangeIsGrounded(false);
                 }
                 
                 break;

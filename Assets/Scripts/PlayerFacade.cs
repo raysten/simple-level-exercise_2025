@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.Serialization;
 
 public class PlayerFacade : MonoBehaviour
 {
@@ -8,8 +7,11 @@ public class PlayerFacade : MonoBehaviour
 
     [SerializeField]
     private CapsuleCollider _capsuleCollider;
+    
+    [SerializeField]
+    private PlayerMovement _playerMovement;
 
-    [FormerlySerializedAs("_playerGroundCheck"),SerializeField]
+    [SerializeField]
     private PlayerGrounded _playerGrounded;
 
     [SerializeField]
@@ -17,16 +19,23 @@ public class PlayerFacade : MonoBehaviour
 
     [SerializeField]
     private PlayerVerticalMovement _playerVerticalMovement;
+    
+    [SerializeField]
+    private PlayerSettings _playerSettings;
 
     public Rigidbody Rigidbody => _rigidbody;
 
     public CapsuleCollider CapsuleCollider => _capsuleCollider;
+    
+    public PlayerMovement PlayerMovement => _playerMovement;
 
-    public PlayerGrounded PlayerGrounded => _playerGrounded;
+    public IGroundedStatus PlayerGrounded => _playerGrounded;
 
     public PlayerInput PlayerInput => _playerInput;
 
     public PlayerVerticalMovement PlayerVerticalMovement => _playerVerticalMovement;
+    
+    public PlayerSettings PlayerSettings => _playerSettings;
 
     private void Reset()
     {
@@ -35,5 +44,6 @@ public class PlayerFacade : MonoBehaviour
         _playerGrounded = GetComponent<PlayerGrounded>();
         _playerInput = GetComponent<PlayerInput>();
         _playerVerticalMovement = GetComponent<PlayerVerticalMovement>();
+        _playerSettings = GetComponent<PlayerSettings>();
     }
 }

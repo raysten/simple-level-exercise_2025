@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+// @todo: refactor
 public class PlayerVerticalMovement : MonoBehaviour
 {
     private const float MIN_VELOCITY = 0.1f;
@@ -13,8 +14,7 @@ public class PlayerVerticalMovement : MonoBehaviour
     private bool _isGravityActive;
     private float _velocity;
 
-    public Vector3 VerticalMovement => Vector3.up * _velocity;
-    public bool IsGravityActive => _isGravityActive;
+    public Vector3 VerticalMovement => Vector3.up * _velocity * Time.fixedDeltaTime;
     
     private void FixedUpdate()
     {

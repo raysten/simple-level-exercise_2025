@@ -9,12 +9,13 @@ public class PlayerInput : MonoBehaviour
     private InputActionAsset _input;
     
     private InputAction _moveInputAction;
-    private Vector2 _movementInput;
+    private Vector2 _horizontalInput;
     private InputAction _lookInputAction;
     private Vector2 _mouseInput;
     private InputAction _jumpInputAction;
 
-    public Vector2 MovementInput => _movementInput;
+    public Vector2 HorizontalInputRaw => _horizontalInput;
+    public Vector3 HorizontalInput => new Vector3(_horizontalInput.x, 0f, _horizontalInput.y).normalized;
     public Vector2 MouseInput => _mouseInput;
     public bool IsJumpPressed { get; private set; }
     
@@ -31,7 +32,7 @@ public class PlayerInput : MonoBehaviour
     
     private void Update()
     {
-        _movementInput = _moveInputAction.ReadValue<Vector2>();
+        _horizontalInput = _moveInputAction.ReadValue<Vector2>();
         _mouseInput = _lookInputAction.ReadValue<Vector2>();
         IsJumpPressed = _jumpInputAction.triggered;
     }
