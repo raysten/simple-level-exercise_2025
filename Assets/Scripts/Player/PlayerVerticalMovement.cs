@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 
-// @todo: refactor
 namespace Player
 {
     public class PlayerVerticalMovement : MonoBehaviour
@@ -11,33 +10,18 @@ namespace Player
         [SerializeField]
         private float _jumpForce = 6f;
 
-        private bool _isGravityActive;
         private float _velocity;
 
         public Vector3 VerticalMovement => Vector3.up * _velocity * Time.fixedDeltaTime;
-    
-        private void FixedUpdate()
+
+        public void ApplyGravity()
         {
-            ApplyGravity();
+            _velocity = Mathf.Max(_velocity + _gravity * Time.deltaTime);
         }
 
-        private void ApplyGravity()
-        {
-            if (_isGravityActive)
-            {
-                _velocity = Mathf.Max(_velocity + _gravity * Time.deltaTime);
-            }
-        }
-
-        public void ActivateGravity()
-        {
-            _isGravityActive = true;
-        }
-
-        public void DeactivateGravity()
+        public void ResetGravity()
         {
             _velocity = 0f;
-            _isGravityActive = false;
         }
 
         public void Jump()
@@ -45,7 +29,7 @@ namespace Player
             AddVelocity(_jumpForce);
         }
 
-        public void AddVelocity(float velocity)
+        private void AddVelocity(float velocity)
         {
             _velocity += velocity;
         }

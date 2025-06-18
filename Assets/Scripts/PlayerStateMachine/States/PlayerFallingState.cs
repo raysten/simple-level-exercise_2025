@@ -13,11 +13,12 @@ namespace PlayerStateMachine.States
         public override void StateEntered()
         {
             _playerFacade.DebugDisplay.ShowMessage(nameof(PlayerFallingState));
-            _playerFacade.PlayerVerticalMovement.ActivateGravity();
         }
 
         public override void FixedUpdateState()
         {
+            _playerFacade.PlayerVerticalMovement.ApplyGravity();
+            
             var horizontalMovement = CalculateHorizontalMovement();
             var verticalMovement = _playerFacade.PlayerVerticalMovement.VerticalMovement;
             
