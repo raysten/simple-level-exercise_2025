@@ -10,8 +10,13 @@ namespace Player
         [SerializeField]
         private float _horizontalSpeedMultiplierWhenFalling = 0.4f;
 
+        [SerializeField]
+        private LayerMask _movingPlatformLayerMask;
+
         public float HorizontalMoveSpeed => _horizontalMoveSpeed;
     
         public float HorizontalSpeedWhenFalling => _horizontalMoveSpeed * _horizontalSpeedMultiplierWhenFalling;
+        
+        public LayerMask MovingPlatformLayerMask => _movingPlatformLayerMask;
     }
 }

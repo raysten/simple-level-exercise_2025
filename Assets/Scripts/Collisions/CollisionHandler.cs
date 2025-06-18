@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Other
+namespace Collisions
 {
     public class CollisionHandler
     {
@@ -12,18 +12,19 @@ namespace Other
         private readonly CapsuleCollider _capsuleCollider;
         private readonly Transform _transform;
         private readonly LayerMask _collisionMask;
-        private readonly IGroundedStatus _groundedStatus;
 
         public CollisionHandler(
-            Transform transform, CapsuleCollider capsuleCollider, LayerMask collisionMask, IGroundedStatus groundedStatus)
+            Transform transform, CapsuleCollider capsuleCollider, LayerMask collisionMask)
         {
             _collisionMask = collisionMask;
             _transform = transform;
             _capsuleCollider = capsuleCollider;
-            _groundedStatus = groundedStatus;
         }
 
-        public Vector3 CalculateMovementWithCollideAndSlide(
+        /// <summary>
+        /// Collide and slide algorithm
+        /// </summary>
+        public Vector3 CalculateMovement(
             Vector3 movementDelta, Vector3 currentPosition, bool isVerticalMovement = false)
         {
             for (var i = 0; i < MAX_ITERATIONS && movementDelta.magnitude >= MIN_MOVEMENT_DELTA; i++)
@@ -41,12 +42,7 @@ namespace Other
                     {
                         if (IsGroundOrSmallSlope(hit))
                         {
-                            _groundedStatus.ChangeIsGrounded(true);
                             break;
-                        }
-                        else
-                        {
-                            _groundedStatus.ChangeIsGrounded(false);
                         }
                     }
                 
@@ -55,11 +51,6 @@ namespace Other
                 else
                 {
                     currentPosition += movementDelta;
-
-                    if (isVerticalMovement)
-                    {
-                        _groundedStatus.ChangeIsGrounded(false);
-                    }
                 
                     break;
                 }

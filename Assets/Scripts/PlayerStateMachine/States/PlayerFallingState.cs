@@ -12,7 +12,7 @@ namespace PlayerStateMachine.States
 
         public override void StateEntered()
         {
-            Debug.LogError("PlayerFallingState: Entered");
+            _playerFacade.DebugDisplay.ShowMessage(nameof(PlayerFallingState));
             _playerFacade.PlayerVerticalMovement.ActivateGravity();
         }
 
@@ -26,20 +26,17 @@ namespace PlayerStateMachine.States
 
         private Vector3 CalculateHorizontalMovement()
         {
-            var horizontalInput = _playerFacade.PlayerInput.HorizontalInput;
+            var playerInput = _playerFacade.PlayerInput.HorizontalInput;
+            var horizontalInput = _playerFacade.transform.TransformDirection(playerInput);
             var speed = _playerFacade.PlayerSettings.HorizontalSpeedWhenFalling;
             
             return horizontalInput * (speed * Time.fixedDeltaTime);
         }
 
         public override void UpdateState()
-        {
-            
-        }
+        { }
 
         public override void StateExited()
-        {
-            Debug.LogError("PlayerFallingState: Exited");
-        }
+        { }
     }
 }

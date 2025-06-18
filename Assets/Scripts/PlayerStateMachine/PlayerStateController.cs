@@ -24,6 +24,7 @@ namespace PlayerStateMachine
         private void Awake()
         {
             _currentState = new PlayerGroundedState(_playerFacade);
+            _currentState.StateEntered();
         }
 
         private void FixedUpdate()
@@ -55,9 +56,7 @@ namespace PlayerStateMachine
         private void ChangeState(PlayerStateBase newState)
         {
             _currentState.StateExited();
-            
             _currentState = newState;
-            
             _currentState.StateEntered();
         }
     }
