@@ -43,15 +43,15 @@ namespace Player
 
         private Vector3 CalculateHorizontalMovement(Vector3 horizontalMovement)
         {
-            // horizontalMovement = transform.TransformDirection(horizontalMovement);
-            horizontalMovement = _collisionHandler.CalculateMovementWithCollideAndSlide(horizontalMovement, transform.position);
+            horizontalMovement = _collisionHandler.CalculateMovement(horizontalMovement, transform.position);
 
             return horizontalMovement;
         }
 
         private Vector3 ApplyVerticalMovement(Vector3 verticalMovement, Vector3 horizontalMovement)
         {
-            return _collisionHandler.CalculateMovementWithCollideAndSlide(verticalMovement, transform.position + horizontalMovement, true);
+            var currentPosition = transform.position + horizontalMovement;
+            return _collisionHandler.CalculateMovement(verticalMovement, currentPosition, true);
         }
     }
 }

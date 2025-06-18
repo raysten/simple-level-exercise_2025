@@ -1,6 +1,7 @@
 ﻿using Platforms;
 using Player;
 using UnityEngine;
+using Utilities;
 
 namespace PlayerStateMachine.States
 {
@@ -20,11 +21,9 @@ namespace PlayerStateMachine.States
         public override void FixedUpdateState()
         {
             var platformVelocity = FindMovingPlatformsVelocity();
-            var horizontalMovement = CalculateHorizontalMovement() + new Vector3(platformVelocity.x, 0f, platformVelocity.z);
+            var horizontalMovement = CalculateHorizontalMovement() + platformVelocity.Horizontal();
             
-            var verticalPlatformVelocity = new Vector3(0f, platformVelocity.y, 0f);
-            var verticalMovement = _playerFacade.PlayerVerticalMovement.VerticalMovement + verticalPlatformVelocity;
-            Debug.DrawRay(_playerFacade.transform.position, verticalMovement.normalized, Color.magenta);
+            var verticalMovement = _playerFacade.PlayerVerticalMovement.VerticalMovement + platformVelocity.Vertical();
             
             _playerFacade.PlayerMovement.Move(horizontalMovement, verticalMovement);
         }
@@ -44,10 +43,10 @@ namespace PlayerStateMachine.States
             var transform = _playerFacade.transform;
             var capsule = _playerFacade.CapsuleCollider;
             var radius = capsule.radius;
-            var castDistance = capsule.height / 2f - radius + 0.2f;
+            var castDistance = capsule.height / 2f - radius + 0.1f;
             var collisionMask = _playerFacade.PlayerSettings.MovingPlatformLayerMask;
             
-            if (Physics.SphereCast(transform.position, radius, -transform.up, out var hit, castDistance, collisionMask))
+            if (Physics.SphereCast(transform.position, radius, Vector3.down, out var hit, castDistance, collisionMask))
             {
                 var movingPlatform = hit.collider.GetComponent<IMovingPlatform>();
 

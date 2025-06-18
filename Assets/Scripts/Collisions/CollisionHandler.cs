@@ -21,7 +21,10 @@ namespace Collisions
             _capsuleCollider = capsuleCollider;
         }
 
-        public Vector3 CalculateMovementWithCollideAndSlide(
+        /// <summary>
+        /// Collide and slide algorithm
+        /// </summary>
+        public Vector3 CalculateMovement(
             Vector3 movementDelta, Vector3 currentPosition, bool isVerticalMovement = false)
         {
             for (var i = 0; i < MAX_ITERATIONS && movementDelta.magnitude >= MIN_MOVEMENT_DELTA; i++)

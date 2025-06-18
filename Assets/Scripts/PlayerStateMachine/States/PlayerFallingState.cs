@@ -21,15 +21,13 @@ namespace PlayerStateMachine.States
             var horizontalMovement = CalculateHorizontalMovement();
             var verticalMovement = _playerFacade.PlayerVerticalMovement.VerticalMovement;
             
-            Debug.DrawRay(_playerFacade.transform.position, verticalMovement.normalized, Color.blue);
-            
             _playerFacade.PlayerMovement.Move(horizontalMovement, verticalMovement);
         }
 
         private Vector3 CalculateHorizontalMovement()
         {
-            // var horizontalInput = _playerFacade.PlayerInput.HorizontalInput;
-            var horizontalInput = _playerFacade.transform.TransformDirection(_playerFacade.PlayerInput.HorizontalInput);
+            var playerInput = _playerFacade.PlayerInput.HorizontalInput;
+            var horizontalInput = _playerFacade.transform.TransformDirection(playerInput);
             var speed = _playerFacade.PlayerSettings.HorizontalSpeedWhenFalling;
             
             return horizontalInput * (speed * Time.fixedDeltaTime);
