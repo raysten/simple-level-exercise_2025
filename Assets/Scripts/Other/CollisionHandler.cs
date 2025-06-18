@@ -12,15 +12,13 @@ namespace Other
         private readonly CapsuleCollider _capsuleCollider;
         private readonly Transform _transform;
         private readonly LayerMask _collisionMask;
-        private readonly IGroundedStatus _groundedStatus;
 
         public CollisionHandler(
-            Transform transform, CapsuleCollider capsuleCollider, LayerMask collisionMask, IGroundedStatus groundedStatus)
+            Transform transform, CapsuleCollider capsuleCollider, LayerMask collisionMask)
         {
             _collisionMask = collisionMask;
             _transform = transform;
             _capsuleCollider = capsuleCollider;
-            _groundedStatus = groundedStatus;
         }
 
         public Vector3 CalculateMovementWithCollideAndSlide(
@@ -41,12 +39,7 @@ namespace Other
                     {
                         if (IsGroundOrSmallSlope(hit))
                         {
-                            _groundedStatus.ChangeIsGrounded(true);
                             break;
-                        }
-                        else
-                        {
-                            _groundedStatus.ChangeIsGrounded(false);
                         }
                     }
                 
@@ -55,11 +48,6 @@ namespace Other
                 else
                 {
                     currentPosition += movementDelta;
-
-                    if (isVerticalMovement)
-                    {
-                        _groundedStatus.ChangeIsGrounded(false);
-                    }
                 
                     break;
                 }

@@ -18,7 +18,7 @@ namespace PlayerStateMachine.Transitions
 
             if (currentState.State == From)
             {
-                canChange = playerFacade.PlayerGrounded.IsGrounded == false;
+                canChange = playerFacade.PlayerGroundCheck.IsGrounded == false;
 
                 if (canChange)
                 {

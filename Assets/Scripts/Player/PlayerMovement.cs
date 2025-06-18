@@ -17,7 +17,6 @@ namespace Player
         [SerializeField]
         private LayerMask _collisionMask;
     
-        private IGroundedStatus _groundedStatus;
         private CollisionHandler _collisionHandler;
 
         private void Reset()
@@ -28,8 +27,7 @@ namespace Player
 
         private void Awake()
         {
-            _groundedStatus = GetComponent<IGroundedStatus>();
-            _collisionHandler = new CollisionHandler(transform, _capsuleCollider, _collisionMask, _groundedStatus);
+            _collisionHandler = new CollisionHandler(transform, _capsuleCollider, _collisionMask);
         }
 
         public void Move(Vector3 horizontalMovement, Vector3 verticalMovement)
@@ -45,7 +43,7 @@ namespace Player
 
         private Vector3 CalculateHorizontalMovement(Vector3 horizontalMovement)
         {
-            horizontalMovement = transform.TransformDirection(horizontalMovement);
+            // horizontalMovement = transform.TransformDirection(horizontalMovement);
             horizontalMovement = _collisionHandler.CalculateMovementWithCollideAndSlide(horizontalMovement, transform.position);
 
             return horizontalMovement;

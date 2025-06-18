@@ -5,8 +5,6 @@ namespace Player
 {
     public class PlayerVerticalMovement : MonoBehaviour
     {
-        private const float MIN_VELOCITY = 0.1f;
-    
         [SerializeField]
         private float _gravity = -14f;
 
@@ -38,7 +36,7 @@ namespace Player
 
         public void DeactivateGravity()
         {
-            _velocity = -MIN_VELOCITY; // so that CollisionHandler always checks if player is grounded
+            _velocity = 0f;
             _isGravityActive = false;
         }
 
