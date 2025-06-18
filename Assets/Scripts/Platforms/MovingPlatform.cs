@@ -4,6 +4,8 @@ namespace Platforms
 {
     public class MovingPlatform : MonoBehaviour, IMovingPlatform
     {
+        private const float MIN_DISTANCE_TO_DESTINATION = 0.1f;
+        
         [SerializeField]
         private Vector3 _endPosition;
 
@@ -31,7 +33,7 @@ namespace Platforms
             Velocity = CalculatePlatformVelocity();
             transform.position += Velocity;
 
-            if (Vector3.SqrMagnitude(transform.position - _currentDestination) <= 0.1f)
+            if (Vector3.SqrMagnitude(transform.position - _currentDestination) <= MIN_DISTANCE_TO_DESTINATION)
             {
                 ChangeDestination();
             }
@@ -41,6 +43,7 @@ namespace Platforms
         {
             var direction = _currentDestination - transform.position;
             var velocity = direction.normalized * (_speed * Time.fixedDeltaTime);
+            
             return velocity;
         }
 
