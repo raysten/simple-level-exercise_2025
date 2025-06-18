@@ -7,6 +7,8 @@ namespace PlayerStateMachine.States
 {
     public class PlayerGroundedState : PlayerStateBase
     {
+        private bool _isOnPlatform;
+        
         public override EPlayerState State => EPlayerState.Grounded;
 
         private PlayerSettings Settings => _playerFacade.PlayerSettings;
@@ -17,7 +19,7 @@ namespace PlayerStateMachine.States
         public override void StateEntered()
         {
             _playerFacade.DebugDisplay.ShowMessage(nameof(PlayerGroundedState));
-            _playerFacade.PlayerVerticalMovement.ResetGravity();
+            _playerFacade.PlayerVerticalMovement.ResetToDefaultGravity();
         }
 
         public override void FixedUpdateState()
@@ -25,7 +27,7 @@ namespace PlayerStateMachine.States
             var platformVelocity = FindMovingPlatformsVelocity();
             var horizontalMovement = CalculateHorizontalMovement() + platformVelocity.Horizontal();
             
-            var verticalMovement = _playerFacade.PlayerVerticalMovement.VerticalMovement + platformVelocity.Vertical();
+            var verticalMovement = _playerFacade.PlayerVerticalMovement.VerticalMovementDelta + platformVelocity.Vertical();
             
             _playerFacade.PlayerMovement.Move(horizontalMovement, verticalMovement);
         }
@@ -56,10 +58,31 @@ namespace PlayerStateMachine.States
                 if (movingPlatform != null)
                 {
                     velocity = movingPlatform.Velocity;
+                    EnterPlatform();
+                }
+                else
+                {
+                    LeavePlatform();
                 }
             }
 
             return velocity;
+        }
+
+        private void EnterPlatform()
+        {
+            if (_isOnPlatform == false)
+            {
+                _playerFacade.PlayerVerticalMovement.ZeroGravity();
+            }
+
+            _isOnPlatform = true;
+        }
+
+        private void LeavePlatform()
+        {
+            _isOnPlatform = false;
+            _playerFacade.PlayerVerticalMovement.ResetToDefaultGravity();
         }
 
         public override void UpdateState()

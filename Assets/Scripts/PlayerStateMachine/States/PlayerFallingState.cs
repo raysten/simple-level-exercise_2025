@@ -20,7 +20,7 @@ namespace PlayerStateMachine.States
             _playerFacade.PlayerVerticalMovement.ApplyGravity();
             
             var horizontalMovement = CalculateHorizontalMovement();
-            var verticalMovement = _playerFacade.PlayerVerticalMovement.VerticalMovement;
+            var verticalMovement = _playerFacade.PlayerVerticalMovement.VerticalMovementDelta;
             
             _playerFacade.PlayerMovement.Move(horizontalMovement, verticalMovement);
         }

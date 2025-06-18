@@ -8,30 +8,35 @@ namespace Player
         private float _gravity = -14f;
 
         [SerializeField]
-        private float _jumpForce = 6f;
+        private float _jumpForce = 7f;
 
         private float _velocity;
 
-        public Vector3 VerticalMovement => Vector3.up * _velocity * Time.fixedDeltaTime;
+        public Vector3 VerticalMovementDelta => Vector3.up * _velocity * Time.fixedDeltaTime;
 
         public void ApplyGravity()
         {
-            _velocity = Mathf.Max(_velocity + _gravity * Time.deltaTime);
+            _velocity = Mathf.Max(_gravity, _velocity + _gravity * Time.deltaTime);
         }
 
-        public void ResetGravity()
+        public void ResetToDefaultGravity()
         {
-            _velocity = 0f;
+            _velocity = _gravity;
         }
 
         public void Jump()
         {
-            AddVelocity(_jumpForce);
+            ChangeVelocity(_jumpForce);
         }
 
-        private void AddVelocity(float velocity)
+        private void ChangeVelocity(float velocity)
         {
-            _velocity += velocity;
+            _velocity = velocity;
+        }
+
+        public void ZeroGravity()
+        {
+            ChangeVelocity(0f);
         }
     }
 }
