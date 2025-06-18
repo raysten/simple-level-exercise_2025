@@ -42,8 +42,13 @@ namespace Shooting
 
             if (_lifetime >= _timeToLive)
             {
-                _pool.Pool.Release(this);
+                Despawn();
             }
+        }
+
+        public void Despawn()
+        {
+            _pool.Pool.Release(this);
         }
     }
 }
