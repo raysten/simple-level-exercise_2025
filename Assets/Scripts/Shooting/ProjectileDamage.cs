@@ -8,7 +8,7 @@ namespace Shooting
         private const float CHECK_DISTANCE = 0.5f;
         
         [SerializeField]
-        private int _damage = 25;
+        private DamageBehaviour _damageBehaviour;
         
         [SerializeField]
         private LayerMask _collisionMask;
