@@ -35,7 +35,7 @@ namespace PlayerStateMachine.States
         private Vector3 CalculateHorizontalMovement()
         {
             var horizontalInput = _playerFacade.transform.TransformDirection(_playerFacade.PlayerInput.HorizontalInput);
-            var isAccelerate = _playerFacade.PlayerInput.IsSprintPressed;
+            var isAccelerate = _playerFacade.PlayerInput.IsSprintHeld;
             var speed = isAccelerate ? Settings.SprintSpeed : Settings.HorizontalMoveSpeed;
             
             return horizontalInput * (speed * Time.fixedDeltaTime);
