@@ -8,6 +8,8 @@ namespace PlayerStateMachine.States
     public class PlayerGroundedState : PlayerStateBase
     {
         public override EPlayerState State => EPlayerState.Grounded;
+
+        private PlayerSettings Settings => _playerFacade.PlayerSettings;
         
         public PlayerGroundedState(PlayerFacade playerFacade) : base(playerFacade)
         { }
@@ -31,7 +33,8 @@ namespace PlayerStateMachine.States
         private Vector3 CalculateHorizontalMovement()
         {
             var horizontalInput = _playerFacade.transform.TransformDirection(_playerFacade.PlayerInput.HorizontalInput);
-            var speed = _playerFacade.PlayerSettings.HorizontalMoveSpeed;
+            var isAccelerate = _playerFacade.PlayerInput.IsSprintPressed;
+            var speed = isAccelerate ? Settings.SprintSpeed : Settings.HorizontalMoveSpeed;
             
             return horizontalInput * (speed * Time.fixedDeltaTime);
         }
@@ -44,7 +47,7 @@ namespace PlayerStateMachine.States
             var capsule = _playerFacade.CapsuleCollider;
             var radius = capsule.radius;
             var castDistance = capsule.height / 2f - radius + 0.1f;
-            var collisionMask = _playerFacade.PlayerSettings.MovingPlatformLayerMask;
+            var collisionMask = Settings.MovingPlatformLayerMask;
             
             if (Physics.SphereCast(transform.position, radius, Vector3.down, out var hit, castDistance, collisionMask))
             {
