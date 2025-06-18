@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Other
+namespace Platforms
 {
     public class MovingPlatform : MonoBehaviour, IMovingPlatform
     {

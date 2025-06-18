@@ -1,4 +1,4 @@
-using Other;
+using Collisions;
 using UnityEngine;
 
 namespace Player

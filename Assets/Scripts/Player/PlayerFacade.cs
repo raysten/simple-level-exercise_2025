@@ -1,5 +1,5 @@
-﻿using Other;
-using UnityEngine;
+﻿using UnityEngine;
+using Utilities;
 
 namespace Player
 {

@@ -1,4 +1,4 @@
-﻿using Other;
+﻿using Platforms;
 using Player;
 using UnityEngine;
 

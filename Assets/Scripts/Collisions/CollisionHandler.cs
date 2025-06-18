@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Other
+namespace Collisions
 {
     public class CollisionHandler
     {

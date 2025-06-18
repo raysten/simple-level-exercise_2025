@@ -1,7 +1,7 @@
 ﻿using TMPro;
 using UnityEngine;
 
-namespace Other
+namespace Utilities
 {
     public class DebugDisplay : MonoBehaviour
     {
