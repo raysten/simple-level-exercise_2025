@@ -1,15 +1,14 @@
-﻿using UnityEngine;
+﻿using DependencyInjection;
+using Framework;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Player
 {
-    public class PlayerInput : MonoBehaviour
+    public class PlayerInput : IHorizontalInput, ISprintInput, IJumpInput, IMouseInput, IAttackInput
     {
         private const string PLAYER_MAP_ID = "Player";
 
-        [SerializeField]
-        private InputActionAsset _input;
-    
         private InputAction _moveInputAction;
         private Vector2 _horizontalInput;
         private InputAction _lookInputAction;
@@ -27,11 +26,32 @@ namespace Player
         public bool IsAttackPressed { get; private set; }
         public bool IsAlternativeAttackPressed { get; private set; }
     
-        private void OnEnable()
+        public PlayerInput(IInputAsset inputAsset, IGameInitializer initializer, IUpdateProvider updateProvider)
         {
-            _input.FindActionMap(PLAYER_MAP_ID).Enable();
+            initializer.OnGameInitialized += Initialize;
+
+            void Initialize()
+            {
+                inputAsset.InputAsset.FindActionMap(PLAYER_MAP_ID).Enable();
+                AssignInputActions();
+                
+                initializer.OnGameInitialized -= Initialize;
+                initializer.OnGameDeinitialized += Deinitialize;
+
+                updateProvider.OnUpdate += Update;
+            }
+
+            void Deinitialize()
+            {
+                inputAsset.InputAsset.FindActionMap(PLAYER_MAP_ID).Disable();
+                
+                initializer.OnGameDeinitialized -= Deinitialize;
+                
+                updateProvider.OnUpdate -= Update;
+            }
         }
-        private void Awake()
+        
+        private void AssignInputActions()
         {
             _moveInputAction = InputSystem.actions.FindAction("Move");
             _lookInputAction = InputSystem.actions.FindAction("Look");
@@ -49,11 +69,6 @@ namespace Player
             IsSprintHeld = _sprintAction.IsPressed();
             IsAttackPressed = _attackAction.triggered;
             IsAlternativeAttackPressed = _alternativeAttackAction.triggered;
-        }
-
-        private void OnDisable()
-        {
-            _input.FindActionMap(PLAYER_MAP_ID).Disable();
         }
     }
 }

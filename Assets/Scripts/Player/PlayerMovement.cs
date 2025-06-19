@@ -1,30 +1,25 @@
 using Collisions;
+using DependencyInjection;
+using Settings;
 using UnityEngine;
 
 namespace Player
 {
-    public class PlayerMovement : MonoBehaviour
+    public class PlayerMovement : IMove
     {
-        [SerializeField]
-        private Rigidbody _rigidbody;
-    
-        [SerializeField]
-        private CapsuleCollider _capsuleCollider;
+        private readonly Transform _transform;
+        private readonly Rigidbody _rigidbody;
 
-        [SerializeField]
-        private LayerMask _collisionMask;
-    
-        private CollisionHandler _collisionHandler;
+        private readonly CollisionHandler _collisionHandler;
 
-        private void Reset()
+        public PlayerMovement(
+            Transform transform, Rigidbody rigidbody, CapsuleCollider capsuleCollider,
+            IMovementLayers collisionConfig)
         {
-            _rigidbody = GetComponent<Rigidbody>();
-            _capsuleCollider = GetComponent<CapsuleCollider>();
-        }
+            _transform = transform;
+            _rigidbody = rigidbody;
 
-        private void Awake()
-        {
-            _collisionHandler = new CollisionHandler(transform, _capsuleCollider, _collisionMask);
+            _collisionHandler = new CollisionHandler(_transform, capsuleCollider, collisionConfig.PlayerMovementCollisionMask);
         }
 
         public void Move(Vector3 horizontalMovement, Vector3 verticalMovement)
@@ -40,14 +35,14 @@ namespace Player
 
         private Vector3 CalculateHorizontalMovement(Vector3 horizontalMovement)
         {
-            horizontalMovement = _collisionHandler.CalculateMovement(horizontalMovement, transform.position);
+            horizontalMovement = _collisionHandler.CalculateMovement(horizontalMovement, _transform.position);
 
             return horizontalMovement;
         }
 
         private Vector3 ApplyVerticalMovement(Vector3 verticalMovement, Vector3 horizontalMovement)
         {
-            var currentPosition = transform.position + horizontalMovement;
+            var currentPosition = _transform.position + horizontalMovement;
             return _collisionHandler.CalculateMovement(verticalMovement, currentPosition, true);
         }
     }

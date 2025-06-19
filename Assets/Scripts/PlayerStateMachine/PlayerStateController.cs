@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Framework;
 using Player;
 using PlayerStateMachine.States;
 using PlayerStateMachine.Transitions;
@@ -6,25 +7,55 @@ using UnityEngine;
 
 namespace PlayerStateMachine
 {
-    public class PlayerStateController : MonoBehaviour
+    public class PlayerStateController
     {
-        [SerializeField]
-        private PlayerFacade _playerFacade;
-        
-        [SerializeReference]
-        private List<PlayerStateTransition> _transitions = new();
+        private readonly List<PlayerStateTransition> _transitions = new();
 
         private PlayerStateBase _currentState;
+        
+        private readonly PlayerStateFactory _stateFactory;
+        private readonly TransitionFactory _transitionFactory;
 
-        private void Reset()
+        public PlayerStateController(
+            PlayerStateFactory stateFactory, TransitionFactory transitionFactory, IGameInitializer initializer,
+            IUpdateProvider updateProvider)
         {
-            _playerFacade = GetComponent<PlayerFacade>();
+            _stateFactory = stateFactory;
+            _transitionFactory = transitionFactory;
+            
+            initializer.OnGameInitialized += Initialize;
+
+            void Initialize()
+            {
+                InitializeFirstState();
+                InstantiateTransitions();
+                
+                initializer.OnGameInitialized -= Initialize;
+                initializer.OnGameDeinitialized += Deinitialize;
+
+                updateProvider.OnFixedUpdate += FixedUpdate;
+                updateProvider.OnUpdate += Update;
+            }
+
+            void Deinitialize()
+            {
+                initializer.OnGameDeinitialized -= Deinitialize;
+                
+                updateProvider.OnFixedUpdate -= FixedUpdate;
+                updateProvider.OnUpdate -= Update;
+            }
         }
 
-        private void Awake()
+        private void InitializeFirstState()
         {
-            _currentState = new PlayerGroundedState(_playerFacade);
+            _currentState = _stateFactory.Create<PlayerGroundedState>();
             _currentState.StateEntered();
+        }
+
+        private void InstantiateTransitions()
+        {
+            _transitions.Add(_transitionFactory.Create<TransitionFromGroundedToFalling>());
+            _transitions.Add(_transitionFactory.Create<TransitionFromFallingToGrounded>());
         }
 
         private void FixedUpdate()
@@ -39,11 +70,11 @@ namespace PlayerStateMachine
             _currentState.UpdateState();
         }
 
-        public void CheckTransitions()
+        private void CheckTransitions()
         {
             foreach (var transition in _transitions)
             {
-                var transitionEvaluation = transition.CanChangeState(_currentState, _playerFacade);
+                var transitionEvaluation = transition.CanChangeState(_currentState, _stateFactory);
                 
                 if (transitionEvaluation.canChange)
                 {

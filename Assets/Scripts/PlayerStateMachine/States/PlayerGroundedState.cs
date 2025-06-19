@@ -1,5 +1,7 @@
-﻿using Platforms;
+﻿using Framework;
+using Platforms;
 using Player;
+using Settings;
 using UnityEngine;
 using Utilities;
 
@@ -9,17 +11,36 @@ namespace PlayerStateMachine.States
     {
         private bool _isOnPlatform;
         
+        private readonly IMovementLayers _movementLayers;
+        private readonly IVerticalMovement _verticalMovement;
+        private readonly IMove _move;
+        private readonly Transform _transform;
+        private readonly IHorizontalInput _horizontalInput;
+        private readonly IHorizontalSpeed _horizontalSpeed;
+        private readonly CapsuleCollider _capsuleCollider;
+        private readonly IJumpInput _jumpInput;
+
         public override EPlayerState State => EPlayerState.Grounded;
 
-        private PlayerSettings Settings => _playerFacade.PlayerSettings;
-        
-        public PlayerGroundedState(PlayerFacade playerFacade) : base(playerFacade)
-        { }
+        public PlayerGroundedState(IMovementLayers movementLayers, IVerticalMovement verticalMovement, IMove move,
+                                   Transform transform, IHorizontalInput horizontalInput,
+                                   IHorizontalSpeed horizontalSpeed, CapsuleCollider capsuleCollider,
+                                   IJumpInput jumpInput)
+        {
+            _movementLayers = movementLayers;
+            _verticalMovement = verticalMovement;
+            _move = move;
+            _transform = transform;
+            _horizontalInput = horizontalInput;
+            _horizontalSpeed = horizontalSpeed;
+            _capsuleCollider = capsuleCollider;
+            _jumpInput = jumpInput;
+        }
 
         public override void StateEntered()
         {
-            _playerFacade.DebugDisplay.ShowMessage(nameof(PlayerGroundedState));
-            _playerFacade.PlayerVerticalMovement.ResetToDefaultGravity();
+            // _playerFacade.DebugDisplay.ShowMessage(nameof(PlayerGroundedState));
+            _verticalMovement.ResetToDefaultGravity();
         }
 
         public override void FixedUpdateState()
@@ -27,15 +48,15 @@ namespace PlayerStateMachine.States
             var platformVelocity = FindMovingPlatformsVelocity();
             var horizontalMovement = CalculateHorizontalMovement() + platformVelocity.Horizontal();
             
-            var verticalMovement = _playerFacade.PlayerVerticalMovement.VerticalMovementDelta + platformVelocity.Vertical();
+            var verticalMovement = _verticalMovement.VerticalMovementDelta + platformVelocity.Vertical();
             
-            _playerFacade.PlayerMovement.Move(horizontalMovement, verticalMovement);
+            _move.Move(horizontalMovement, verticalMovement);
         }
 
         private Vector3 CalculateHorizontalMovement()
         {
-            var horizontalInput = _playerFacade.transform.TransformDirection(_playerFacade.PlayerInput.HorizontalInput);
-            var speed = _playerFacade.PlayerHorizontalSpeed.CalculateGroundedSpeed();
+            var horizontalInput = _transform.TransformDirection(_horizontalInput.HorizontalInput);
+            var speed = _horizontalSpeed.CalculateGroundedSpeed();
             
             return horizontalInput * (speed * Time.fixedDeltaTime);
         }
@@ -43,14 +64,12 @@ namespace PlayerStateMachine.States
         private Vector3 FindMovingPlatformsVelocity()
         {
             var velocity = Vector3.zero;
+
+            var radius = _capsuleCollider.radius;
+            var castDistance = _capsuleCollider.height / 2f - radius + 0.1f;
+            var collisionMask = _movementLayers.MovingPlatformLayerMask;
             
-            var transform = _playerFacade.transform;
-            var capsule = _playerFacade.CapsuleCollider;
-            var radius = capsule.radius;
-            var castDistance = capsule.height / 2f - radius + 0.1f;
-            var collisionMask = Settings.MovingPlatformLayerMask;
-            
-            if (Physics.SphereCast(transform.position, radius, Vector3.down, out var hit, castDistance, collisionMask))
+            if (Physics.SphereCast(_transform.position, radius, Vector3.down, out var hit, castDistance, collisionMask))
             {
                 var movingPlatform = hit.collider.GetComponent<IMovingPlatform>();
 
@@ -72,7 +91,7 @@ namespace PlayerStateMachine.States
         {
             if (_isOnPlatform == false)
             {
-                _playerFacade.PlayerVerticalMovement.ZeroGravity();
+                _verticalMovement.ZeroGravity();
             }
 
             _isOnPlatform = true;
@@ -81,14 +100,14 @@ namespace PlayerStateMachine.States
         private void LeavePlatform()
         {
             _isOnPlatform = false;
-            _playerFacade.PlayerVerticalMovement.ResetToDefaultGravity();
+            _verticalMovement.ResetToDefaultGravity();
         }
 
         public override void UpdateState()
         {
-            if (_playerFacade.PlayerInput.IsJumpPressed)
+            if (_jumpInput.IsJumpPressed)
             {
-                _playerFacade.PlayerVerticalMovement.Jump();
+                _verticalMovement.Jump();
             }
         }
 

@@ -5,31 +5,45 @@ namespace PlayerStateMachine.States
 {
     public class PlayerFallingState : PlayerStateBase
     {
+        private readonly IVerticalMovement _verticalMovement;
+        private readonly IMove _movement;
+        private readonly IHorizontalInput _horizontalInput;
+        private readonly Transform _transform;
+        private IHorizontalSpeed _playerHorizontalSpeed;
+
         public override EPlayerState State => EPlayerState.Falling;
         
-        public PlayerFallingState(PlayerFacade playerFacade) : base(playerFacade)
-        { }
+        public PlayerFallingState(
+            IVerticalMovement verticalMovement, IMove movement, IHorizontalInput horizontalInput, Transform  transform,
+            IHorizontalSpeed playerHorizontalSpeed)
+        {
+            _verticalMovement = verticalMovement;
+            _movement = movement;
+            _horizontalInput = horizontalInput;
+            _transform = transform;
+            _playerHorizontalSpeed = playerHorizontalSpeed;
+        }
 
         public override void StateEntered()
         {
-            _playerFacade.DebugDisplay.ShowMessage(nameof(PlayerFallingState));
+            // _playerFacade.DebugDisplay.ShowMessage(nameof(PlayerFallingState));
         }
 
         public override void FixedUpdateState()
         {
-            _playerFacade.PlayerVerticalMovement.ApplyGravity();
+            _verticalMovement.ApplyGravity();
             
             var horizontalMovement = CalculateHorizontalMovement();
-            var verticalMovement = _playerFacade.PlayerVerticalMovement.VerticalMovementDelta;
+            var verticalMovement = _verticalMovement.VerticalMovementDelta;
             
-            _playerFacade.PlayerMovement.Move(horizontalMovement, verticalMovement);
+            _movement.Move(horizontalMovement, verticalMovement);
         }
 
         private Vector3 CalculateHorizontalMovement()
         {
-            var playerInput = _playerFacade.PlayerInput.HorizontalInput;
-            var horizontalInput = _playerFacade.transform.TransformDirection(playerInput);
-            var speed = _playerFacade.PlayerHorizontalSpeed.CalculateSpeedWhenFalling();
+            var playerInput = _horizontalInput.HorizontalInput;
+            var horizontalInput = _transform.TransformDirection(playerInput);
+            var speed = _playerHorizontalSpeed.CalculateSpeedWhenFalling();
             
             return horizontalInput * (speed * Time.fixedDeltaTime);
         }

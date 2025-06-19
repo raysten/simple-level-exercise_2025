@@ -1,28 +1,31 @@
 ﻿using Player;
 using PlayerStateMachine.States;
-using UnityEngine;
 
 namespace PlayerStateMachine.Transitions
 {
-    [CreateAssetMenu(fileName = nameof(TransitionFromFallingToGrounded),
-                     menuName = "Player/StateTransitions/" + nameof(TransitionFromFallingToGrounded))]
     public class TransitionFromFallingToGrounded : PlayerStateTransition
     {
+        private IGroundedStatus _groundedStatus;
         protected override EPlayerState From => EPlayerState.Falling;
+        
+        public TransitionFromFallingToGrounded(IGroundedStatus groundedStatus)
+        {
+            _groundedStatus = groundedStatus;
+        }
 
         public override (bool canChange, PlayerStateBase newState) CanChangeState(
-            PlayerStateBase currentState, PlayerFacade playerFacade)
+            PlayerStateBase currentState, PlayerStateFactory stateFactory)
         {
             var canChange = false;
             var newState = currentState;
 
             if (currentState.State == From)
             {
-                canChange = playerFacade.PlayerGroundCheck.IsGrounded;
+                canChange = _groundedStatus.IsGrounded;
 
                 if (canChange)
                 {
-                    newState = new PlayerGroundedState(playerFacade);
+                    newState = stateFactory.Create<PlayerGroundedState>();
                 }
             }
 

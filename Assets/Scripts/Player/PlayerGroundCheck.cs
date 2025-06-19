@@ -1,28 +1,45 @@
-﻿using UnityEngine;
+﻿using DependencyInjection;
+using Framework;
+using UnityEngine;
 
 namespace Player
 {
-    public class PlayerGroundCheck : MonoBehaviour
+    public class PlayerGroundCheck : IGroundedStatus
     {
-        [SerializeField]
-        private CapsuleCollider _capsuleCollider;
-        
-        [SerializeField]
-        private LayerMask _collisionMask;
-
-        [SerializeField]
-        private float _offsetIntoCapsule = 0.05f; // to avoid detecting walls
-
-        [SerializeField]
-        private float _groundDistance = 0.1f;
-
         private float _checkRadius;
         
+        private IGroundCheckConfig _config;
+        private CapsuleCollider _capsuleCollider;
+        private Transform _transform;
+
         public bool IsGrounded { get; private set; }
 
-        private void Awake()
+        public PlayerGroundCheck(
+            IGameInitializer initializer, IUpdateProvider updateProvider, IGroundCheckConfig config,
+            CapsuleCollider capsuleCollider, Transform transform)
         {
-            _checkRadius = _capsuleCollider.radius - _offsetIntoCapsule;
+            _capsuleCollider = capsuleCollider;
+            _config = config;
+            _transform = transform;
+            
+            initializer.OnGameInitialized += Initialize;
+
+            void Initialize()
+            {
+                _checkRadius = _capsuleCollider.radius - _config.GroundCheckOffsetIntoCapsule;
+                
+                initializer.OnGameInitialized -= Initialize;
+                initializer.OnGameDeinitialized += Deinitialize;
+
+                updateProvider.OnFixedUpdate += FixedUpdate;
+            }
+
+            void Deinitialize()
+            {
+                initializer.OnGameDeinitialized -= Deinitialize;
+                
+                updateProvider.OnFixedUpdate -= FixedUpdate;
+            }
         }
 
         private void FixedUpdate()
@@ -32,15 +49,11 @@ namespace Player
 
         private bool CheckIsGrounded()
         {
-            var origin = transform.position + Vector3.down * (_capsuleCollider.height / 2f - _checkRadius + _groundDistance);
-            return Physics.CheckSphere(origin, _checkRadius, _collisionMask, QueryTriggerInteraction.Ignore);
-        }
-        
-        private void OnDrawGizmosSelected()
-        {
-            Gizmos.color = Color.red;
-            var origin = transform.position + Vector3.down * (_capsuleCollider.height / 2f - _checkRadius + _groundDistance);
-            Gizmos.DrawWireSphere(origin, _checkRadius);
+            var groundDistance = _config.GroundDistance;
+            var origin = _transform.position + Vector3.down * (_capsuleCollider.height / 2f - _checkRadius + groundDistance);
+            var collisionMask = _config.GroundCheckLayerMask;
+            
+            return Physics.CheckSphere(origin, _checkRadius, collisionMask, QueryTriggerInteraction.Ignore);
         }
     }
 }

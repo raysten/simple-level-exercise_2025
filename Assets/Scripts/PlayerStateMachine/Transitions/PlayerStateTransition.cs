@@ -1,14 +1,12 @@
-﻿using Player;
-using PlayerStateMachine.States;
-using UnityEngine;
+﻿using PlayerStateMachine.States;
 
 namespace PlayerStateMachine.Transitions
 {
-    public abstract class PlayerStateTransition : ScriptableObject
+    public abstract class PlayerStateTransition
     {
         protected abstract EPlayerState From { get; }
 
         public abstract (bool canChange, PlayerStateBase newState) CanChangeState(
-            PlayerStateBase currentState, PlayerFacade playerFacade);
+            PlayerStateBase currentState, PlayerStateFactory stateFactory);
     }
 }

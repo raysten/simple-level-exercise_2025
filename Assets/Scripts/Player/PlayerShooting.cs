@@ -1,17 +1,12 @@
 ﻿using Player.Powerups;
 using Shooting;
 using UnityEngine;
+using Zenject;
 
 namespace Player
 {
     public class PlayerShooting : MonoBehaviour
     {
-        [SerializeField]
-        private PlayerInput _playerInput;
-
-        [SerializeField]
-        private PowerupsController _powerupsController;
-        
         [SerializeField]
         private Gun _primaryGun;
 
@@ -19,13 +14,16 @@ namespace Player
         private Gun _secondaryGun;
 
         private Gun _currentGun;
+        
+        private IAttackInput _attackInput;
+        private IPowerupsProvider _powerupsProvider;
 
-        private void Reset()
+        [Inject]
+        private void Construct(IAttackInput attackInput, IPowerupsProvider powerupsProvider)
         {
-            _playerInput = GetComponent<PlayerInput>();
-            _powerupsController = GetComponent<PowerupsController>();
+            _attackInput = attackInput;
+            _powerupsProvider = powerupsProvider;
         }
-
         private void Awake()
         {
             _currentGun = _primaryGun;
@@ -38,14 +36,14 @@ namespace Player
 
         private void TryShoot()
         {
-            var damageMultiplier = _powerupsController.FindSumOfMultipliersOf(EPlayerStatistic.Damage);
+            var damageMultiplier = _powerupsProvider.FindSumOfMultipliersOf(EPlayerStatistic.Damage);
 
-            if (_playerInput.IsAttackPressed)
+            if (_attackInput.IsAttackPressed)
             {
                 TrySwitchGuns(_primaryGun);
                 _primaryGun.Shoot(damageMultiplier);
             }
-            else if (_playerInput.IsAlternativeAttackPressed)
+            else if (_attackInput.IsAlternativeAttackPressed)
             {
                 TrySwitchGuns(_secondaryGun);
                 _secondaryGun.Shoot(damageMultiplier);

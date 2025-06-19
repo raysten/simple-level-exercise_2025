@@ -1,12 +1,33 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Framework;
 using UnityEngine;
 
 namespace Player.Powerups
 {
-    public class PowerupsController : MonoBehaviour
+    public class PowerupsController : IPowerupsProvider, IAddPowerup
     {
         private readonly Dictionary<EPlayerStatistic, List<Powerup>> _powerups = new();
+
+        public PowerupsController(IGameInitializer initializer, IUpdateProvider updateProvider)
+        {
+            initializer.OnGameInitialized += SubscribeEvents;
+
+            void SubscribeEvents()
+            {
+                initializer.OnGameInitialized -= SubscribeEvents;
+                initializer.OnGameDeinitialized += UnsubscribeEvents;
+
+                updateProvider.OnUpdate += Update;
+            }
+
+            void UnsubscribeEvents()
+            {
+                initializer.OnGameDeinitialized -= UnsubscribeEvents;
+                
+                updateProvider.OnUpdate -= Update;
+            }
+        }
 
         public void Add(PowerupConfig powerupConfig)
         {
@@ -34,7 +55,7 @@ namespace Player.Powerups
             }
         }
 
-        private static void UpdatePowerup(List<Powerup> powerupsOfType, int i)
+        private void UpdatePowerup(List<Powerup> powerupsOfType, int i)
         {
             var powerup = powerupsOfType[i];
 

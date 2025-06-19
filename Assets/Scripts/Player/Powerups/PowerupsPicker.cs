@@ -1,26 +1,43 @@
-﻿using System;
-using Collisions;
+﻿using Collisions;
+using DependencyInjection;
+using Framework;
 using UnityEngine;
 
 namespace Player.Powerups
 {
-    public class PowerupsPicker : MonoBehaviour
+    public class PowerupsPicker
     {
-        [SerializeField]
-        private CapsuleCollider _capsuleCollider;
-
-        [SerializeField]
-        private LayerMask _collisionMask;
-        
-        [SerializeField]
-        private PowerupsController _powerupsController;
-        
         private readonly Collider[] _collidersBuffer = new Collider[5];
+        
+        private readonly Transform _transform;
+        private readonly CapsuleCollider _capsuleCollider;
+        private readonly IPowerupLayerMask _powerupLayerMask;
+        private readonly IAddPowerup _addPowerup;
 
-        private void Reset()
+        public PowerupsPicker(Transform transform, CapsuleCollider capsuleCollider, IPowerupLayerMask powerupLayerMask,
+                              IAddPowerup addPowerup, IGameInitializer initializer, IUpdateProvider updateProvider)
         {
-            _capsuleCollider = GetComponent<CapsuleCollider>();
-            _powerupsController = GetComponent<PowerupsController>();
+            _capsuleCollider = capsuleCollider;
+            _transform = transform;
+            _powerupLayerMask = powerupLayerMask;
+            _addPowerup = addPowerup;
+            
+            initializer.OnGameInitialized += SubscribeEvents;
+
+            void SubscribeEvents()
+            {
+                initializer.OnGameInitialized -= SubscribeEvents;
+                initializer.OnGameDeinitialized += UnsubscribeEvents;
+
+                updateProvider.OnFixedUpdate += FixedUpdate;
+            }
+
+            void UnsubscribeEvents()
+            {
+                initializer.OnGameDeinitialized -= UnsubscribeEvents;
+                
+                updateProvider.OnFixedUpdate -= FixedUpdate;
+            }
         }
 
         private void FixedUpdate()
@@ -30,11 +47,11 @@ namespace Player.Powerups
 
         private void TryPickPowerups()
         {
-            var (capsuleStart, capsuleEnd) = PhysicsUtility.CalculateCapsulePoints(transform, _capsuleCollider);
-
+            var (capsuleStart, capsuleEnd) = PhysicsUtility.CalculateCapsulePoints(_transform, _capsuleCollider);
+            var collisionMask = _powerupLayerMask.PowerupLayerMask;
             var hitCount = Physics.OverlapCapsuleNonAlloc(capsuleStart, capsuleEnd, _capsuleCollider.radius,
-                                                          _collidersBuffer, _collisionMask);
-
+                                                          _collidersBuffer, collisionMask);
+            
             for (var i = 0; i < hitCount; i++)
             {
                 var hitCollider = _collidersBuffer[i];
@@ -43,7 +60,7 @@ namespace Player.Powerups
                 {
                     foreach (var powerupConfig in powerupPickable.PowerupConfigs)
                     {
-                        _powerupsController.Add(powerupConfig);
+                        _addPowerup.Add(powerupConfig);
                     }
                     
                     powerupPickable.Destroy();

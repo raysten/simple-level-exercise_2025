@@ -1,42 +1,38 @@
-﻿using Player.Powerups;
+﻿using DependencyInjection;
+using Player.Powerups;
 using UnityEngine;
 
 namespace Player
 {
-    public class PlayerHorizontalSpeed : MonoBehaviour
+    public class PlayerHorizontalSpeed : IHorizontalSpeed
     {
-        [SerializeField]
-        private PlayerInput _playerInput;
-        
-        [SerializeField]
-        private PowerupsController _powerupsController;
+        private readonly ISprintInput _sprintInput;
+        private readonly IPowerupsProvider _powerupsProvider;
+        private readonly IHorizontalSpeedConfig _settings;
 
-        [SerializeField]
-        private PlayerSettings _playerSettings;
-
-        private void Reset()
+        public PlayerHorizontalSpeed(
+            ISprintInput sprintInput, IPowerupsProvider powerupsProvider, IHorizontalSpeedConfig horizontalSpeedConfig)
         {
-            _playerInput = GetComponent<PlayerInput>();
-            _powerupsController = GetComponent<PowerupsController>();
-            _playerSettings = GetComponent<PlayerSettings>();
-            
+            _sprintInput = sprintInput;
+            _powerupsProvider = powerupsProvider;
+            _settings = horizontalSpeedConfig;
         }
 
         public float CalculateGroundedSpeed()
         {
-            var isAccelerate = _playerInput.IsSprintHeld;
-            var speed = isAccelerate ? _playerSettings.SprintSpeed : _playerSettings.HorizontalMoveSpeed;
+            var isAccelerate = _sprintInput.IsSprintHeld;
+            var speed = isAccelerate ? _settings.SprintSpeed : _settings.HorizontalMovementSpeed;
 
-            var powerupsMultiplier = _powerupsController.FindSumOfMultipliersOf(EPlayerStatistic.HorizontalSpeed);
+            var powerupsMultiplier = _powerupsProvider.FindSumOfMultipliersOf(EPlayerStatistic.HorizontalSpeed);
             
             return speed * powerupsMultiplier;
         }
 
         public float CalculateSpeedWhenFalling()
         {
-            var powerupsMultiplier = _powerupsController.FindSumOfMultipliersOf(EPlayerStatistic.HorizontalSpeed);
+            var powerupsMultiplier = _powerupsProvider.FindSumOfMultipliersOf(EPlayerStatistic.HorizontalSpeed);
             
-            return _playerSettings.HorizontalSpeedWhenFalling * powerupsMultiplier;
+            return _settings.HorizontalSpeedWhenFalling * powerupsMultiplier;
         }
     }
 }
