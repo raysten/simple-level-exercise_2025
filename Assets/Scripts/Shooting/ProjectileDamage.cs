@@ -40,7 +40,7 @@ namespace Shooting
         {
             foreach (var damageBehaviour in _damageBehaviours)
             {
-                damageBehaviour.DealDamage(hit);
+                damageBehaviour.DealDamage(hit, _projectile.DamageMultiplier);
             }
         }
     }

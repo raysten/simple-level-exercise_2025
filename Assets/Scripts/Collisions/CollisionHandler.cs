@@ -73,12 +73,7 @@ namespace Collisions
         private bool DetectCollisionFrom(Vector3 currentPosition, Vector3 direction, out RaycastHit hit)
         {
             var radius = _capsuleCollider.radius;
-            var height = _capsuleCollider.height;
-            var up = _transform.up;
-
-            var centerInWorldSpace = currentPosition + _transform.rotation * _capsuleCollider.center;
-            var point1 = centerInWorldSpace + up * (height / 2f - radius);
-            var point2 = centerInWorldSpace - up * (height / 2f - radius);
+            var (point1, point2) = PhysicsUtility.CalculateCapsulePoints(_transform, _capsuleCollider, currentPosition);
         
             return Physics.CapsuleCast(point1, point2, radius, direction.normalized, out hit, 
                                        direction.magnitude + SKIN_WIDTH, _collisionMask,

@@ -17,7 +17,7 @@ namespace Shooting
         
         private readonly Collider[] _hitBuffer = new Collider[MAX_AFFECTED_TARGETS];
         
-        public override void DealDamage(RaycastHit hit)
+        public override void DealDamage(RaycastHit hit, float damageMultiplier)
         {
             var hitCount = Physics.OverlapSphereNonAlloc(hit.point, _damageRadius, _hitBuffer, _affectedLayers);
 
@@ -27,7 +27,7 @@ namespace Shooting
 
                 if (collider.TryGetComponent(out Damageable damageable))
                 {
-                    damageable.TakeDamage(_damage);
+                    damageable.TakeDamage(_damage * damageMultiplier);
                 }
             }
         }

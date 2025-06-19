@@ -13,16 +13,20 @@ namespace Shooting
 
         private float _lifetime;
         private ProjectilePool _pool;
+        
+        public float DamageMultiplier { get; private set; }
 
         public void AssignPool(ProjectilePool pool)
         {
             _pool = pool;
         }
 
-        public void Initialize(Vector3 position, Quaternion rotation)
+        public void Initialize(Vector3 position, Quaternion rotation, float damageMultiplier)
         {
             _lifetime = 0f;
             transform.SetPositionAndRotation(position, rotation);
+            
+            DamageMultiplier = damageMultiplier;
         }
 
         private void FixedUpdate()

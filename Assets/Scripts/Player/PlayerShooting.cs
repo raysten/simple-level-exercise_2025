@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Player.Powerups;
 using Shooting;
 using UnityEngine;
 
@@ -10,6 +10,9 @@ namespace Player
         private PlayerInput _playerInput;
 
         [SerializeField]
+        private PowerupsController _powerupsController;
+        
+        [SerializeField]
         private Gun _primaryGun;
 
         [SerializeField]
@@ -20,6 +23,7 @@ namespace Player
         private void Reset()
         {
             _playerInput = GetComponent<PlayerInput>();
+            _powerupsController = GetComponent<PowerupsController>();
         }
 
         private void Awake()
@@ -29,15 +33,22 @@ namespace Player
 
         private void Update()
         {
+            TryShoot();
+        }
+
+        private void TryShoot()
+        {
+            var damageMultiplier = _powerupsController.FindSumOfMultipliersOf(EPlayerStatistic.Damage);
+
             if (_playerInput.IsAttackPressed)
             {
                 TrySwitchGuns(_primaryGun);
-                _primaryGun.Shoot();
+                _primaryGun.Shoot(damageMultiplier);
             }
             else if (_playerInput.IsAlternativeAttackPressed)
             {
                 TrySwitchGuns(_secondaryGun);
-                _secondaryGun.Shoot();
+                _secondaryGun.Shoot(damageMultiplier);
             }
         }
 

@@ -17,10 +17,10 @@ namespace Shooting
             _projectilePool = new ProjectilePool(_projectilePrefab);
         }
 
-        public void Shoot()
+        public void Shoot(float damageMultiplier)
         {
             var projectile = _projectilePool.Pool.Get();
-            projectile.Initialize(_spawnPoint.position, _spawnPoint.rotation);
+            projectile.Initialize(_spawnPoint.position, _spawnPoint.rotation, damageMultiplier);
         }
     }
 }

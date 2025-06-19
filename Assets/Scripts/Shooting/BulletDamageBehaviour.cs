@@ -7,11 +7,11 @@ namespace Shooting
                      menuName = "Shooting/DamageBehaviours/" + nameof(BulletDamageBehaviour))]
     public class BulletDamageBehaviour : DamageBehaviour
     {
-        public override void DealDamage(RaycastHit hit)
+        public override void DealDamage(RaycastHit hit, float damageMultiplier)
         {
             if (hit.transform.TryGetComponent(out Damageable damageable))
             {
-                damageable.TakeDamage(_damage);
+                damageable.TakeDamage(_damage * damageMultiplier);
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Player.Powerups;
+using UnityEngine;
 using Utilities;
 
 namespace Player
@@ -22,6 +23,9 @@ namespace Player
 
         [SerializeField]
         private PlayerVerticalMovement _playerVerticalMovement;
+        
+        [SerializeField]
+        private PowerupsController _powerupsController;
     
         [SerializeField]
         private PlayerSettings _playerSettings;
@@ -43,6 +47,8 @@ namespace Player
     
         public PlayerSettings PlayerSettings => _playerSettings;
         
+        public PowerupsController PowerupsController => _powerupsController;
+        
         public DebugDisplay DebugDisplay => _debugDisplay;
 
         private void Reset()
@@ -52,6 +58,7 @@ namespace Player
             _playerGroundCheck = GetComponent<PlayerGroundCheck>();
             _playerInput = GetComponent<PlayerInput>();
             _playerVerticalMovement = GetComponent<PlayerVerticalMovement>();
+            _powerupsController = GetComponent<PowerupsController>();
             _playerSettings = GetComponent<PlayerSettings>();
         }
     }

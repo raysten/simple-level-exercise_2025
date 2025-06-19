@@ -7,6 +7,6 @@ namespace Shooting
         [SerializeField]
         protected int _damage = 25;
 
-        public abstract void DealDamage(RaycastHit hit);
+        public abstract void DealDamage(RaycastHit hit, float damageMultiplier);
     }
 }

@@ -6,12 +6,12 @@ namespace Damageables
     public class Damageable : MonoBehaviour, IDamageable
     {
         [SerializeField]
-        private int _maxHealth = 200;
+        private float _maxHealth = 200f;
         
         [SerializeField]
         private ColorByHealth _colorByHealth;
 
-        private int _currentHealth;
+        private float _currentHealth;
 
         private void Reset()
         {
@@ -23,10 +23,10 @@ namespace Damageables
             _currentHealth = _maxHealth;
         }
 
-        public void TakeDamage(int damage)
+        public void TakeDamage(float damage)
         {
             _currentHealth = Mathf.Max(0, _currentHealth - damage);
-            _colorByHealth.ChangeColor((float)_currentHealth / _maxHealth);
+            _colorByHealth.ChangeColor(_currentHealth / _maxHealth);
 
             if (_currentHealth == 0)
             {
