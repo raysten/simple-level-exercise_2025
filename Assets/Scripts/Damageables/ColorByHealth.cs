@@ -2,7 +2,7 @@
 
 namespace Damageables
 {
-    public class ColorByDamage : MonoBehaviour
+    public class ColorByHealth : MonoBehaviour
     {
         private static readonly int _color = Shader.PropertyToID("_BaseColor");
         
@@ -34,10 +34,7 @@ namespace Damageables
         public void ChangeColor(float healthFraction)
         {
             var newColor = CalculateNewColor(healthFraction);
-            
-            _renderer.GetPropertyBlock(_materialPropertyBlock);
-            _materialPropertyBlock.SetColor(_color, newColor);
-            _renderer.SetPropertyBlock(_materialPropertyBlock);
+            ChangeColor(newColor);
         }
 
         private Color CalculateNewColor(float healthFraction)
@@ -67,6 +64,13 @@ namespace Damageables
         {
             var interpolationFactor = healthFraction / halfColorRange;
             return Color.Lerp(_deadColor, _halfDeadColor, interpolationFactor);
+        }
+
+        private void ChangeColor(Color color)
+        {
+            _renderer.GetPropertyBlock(_materialPropertyBlock);
+            _materialPropertyBlock.SetColor(_color, color);
+            _renderer.SetPropertyBlock(_materialPropertyBlock);
         }
     }
 }

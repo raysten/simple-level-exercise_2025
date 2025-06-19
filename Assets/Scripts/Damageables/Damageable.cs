@@ -9,13 +9,13 @@ namespace Damageables
         private int _maxHealth = 200;
         
         [SerializeField]
-        private ColorByDamage _colorByDamage;
+        private ColorByHealth _colorByHealth;
 
         private int _currentHealth;
 
         private void Reset()
         {
-            _colorByDamage = GetComponent<ColorByDamage>();
+            _colorByHealth = GetComponent<ColorByHealth>();
         }
 
         private void Awake()
@@ -26,7 +26,7 @@ namespace Damageables
         public void TakeDamage(int damage)
         {
             _currentHealth = Mathf.Max(0, _currentHealth - damage);
-            _colorByDamage.ChangeColor((float)_currentHealth / _maxHealth);
+            _colorByHealth.ChangeColor((float)_currentHealth / _maxHealth);
 
             if (_currentHealth == 0)
             {
