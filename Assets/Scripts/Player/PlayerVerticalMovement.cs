@@ -1,5 +1,4 @@
-﻿using System;
-using Player.Powerups;
+﻿using Player.Powerups;
 using UnityEngine;
 
 namespace Player
