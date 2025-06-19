@@ -1,5 +1,5 @@
-﻿using DependencyInjection;
-using Framework;
+﻿using Framework;
+using Settings;
 using UnityEngine;
 
 namespace Player
@@ -8,9 +8,9 @@ namespace Player
     {
         private float _checkRadius;
         
-        private IGroundCheckConfig _config;
-        private CapsuleCollider _capsuleCollider;
-        private Transform _transform;
+        private readonly IGroundCheckConfig _config;
+        private readonly CapsuleCollider _capsuleCollider;
+        private readonly Transform _transform;
 
         public bool IsGrounded { get; private set; }
 

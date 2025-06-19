@@ -2,7 +2,6 @@
 
 namespace Shooting
 {
-    // @todo: make it a dynamic rigidbody
     public class Projectile : MonoBehaviour
     {
         [SerializeField]

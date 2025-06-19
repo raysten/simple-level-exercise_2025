@@ -1,6 +1,5 @@
 ﻿using Player;
 using PlayerStateMachine.States;
-using UnityEngine;
 
 namespace PlayerStateMachine.Transitions
 {

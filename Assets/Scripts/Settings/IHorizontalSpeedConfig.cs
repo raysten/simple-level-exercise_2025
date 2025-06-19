@@ -1,4 +1,4 @@
-﻿namespace DependencyInjection
+﻿namespace Settings
 {
     public interface IHorizontalSpeedConfig
     {

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace DependencyInjection
+namespace Settings
 {
     public interface IGroundCheckConfig
     {

@@ -1,6 +1,6 @@
 ﻿using UnityEngine.InputSystem;
 
-namespace DependencyInjection
+namespace Settings
 {
     public interface IInputAsset
     {

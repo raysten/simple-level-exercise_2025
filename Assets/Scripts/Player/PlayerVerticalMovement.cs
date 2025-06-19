@@ -1,5 +1,5 @@
-﻿using DependencyInjection;
-using Player.Powerups;
+﻿using Player.Powerups;
+using Settings;
 using UnityEngine;
 
 namespace Player

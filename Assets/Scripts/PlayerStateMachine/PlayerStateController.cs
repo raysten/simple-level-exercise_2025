@@ -14,7 +14,7 @@ namespace PlayerStateMachine
         
         private readonly PlayerStateFactory _stateFactory;
         private readonly TransitionFactory _transitionFactory;
-        private IPlayerEvents _playerEvents;
+        private readonly IPlayerEvents _playerEvents;
 
         public PlayerStateController(
             PlayerStateFactory stateFactory, TransitionFactory transitionFactory, IGameInitializer initializer,

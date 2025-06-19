@@ -9,7 +9,7 @@ namespace PlayerStateMachine.States
         private readonly IMove _movement;
         private readonly IHorizontalInput _horizontalInput;
         private readonly Transform _transform;
-        private IHorizontalSpeed _playerHorizontalSpeed;
+        private readonly IHorizontalSpeed _playerHorizontalSpeed;
 
         public override EPlayerState State => EPlayerState.Falling;
         

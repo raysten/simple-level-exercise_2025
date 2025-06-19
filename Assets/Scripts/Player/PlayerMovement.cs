@@ -1,5 +1,4 @@
 using Collisions;
-using DependencyInjection;
 using Settings;
 using UnityEngine;
 

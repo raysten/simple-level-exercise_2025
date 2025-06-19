@@ -1,5 +1,4 @@
-﻿using DependencyInjection;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Settings

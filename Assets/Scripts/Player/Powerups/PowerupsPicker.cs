@@ -1,6 +1,7 @@
 ﻿using Collisions;
 using DependencyInjection;
 using Framework;
+using Settings;
 using UnityEngine;
 
 namespace Player.Powerups
@@ -58,14 +59,19 @@ namespace Player.Powerups
 
                 if (hitCollider.TryGetComponent<PowerupPickable>(out var powerupPickable))
                 {
-                    foreach (var powerupConfig in powerupPickable.PowerupConfigs)
-                    {
-                        _addPowerup.Add(powerupConfig);
-                    }
-                    
-                    powerupPickable.Destroy();
+                    PickPowerup(powerupPickable);
                 }
             }
+        }
+
+        private void PickPowerup(PowerupPickable powerupPickable)
+        {
+            foreach (var powerupConfig in powerupPickable.PowerupConfigs)
+            {
+                _addPowerup.Add(powerupConfig);
+            }
+
+            powerupPickable.Destroy();
         }
     }
 }

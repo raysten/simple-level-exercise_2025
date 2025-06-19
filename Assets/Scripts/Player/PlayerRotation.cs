@@ -1,5 +1,5 @@
-﻿using DependencyInjection;
-using Framework;
+﻿using Framework;
+using Settings;
 using UnityEngine;
 
 namespace Player

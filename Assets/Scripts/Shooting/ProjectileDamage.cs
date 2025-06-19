@@ -8,7 +8,7 @@ namespace Shooting
         private const float CHECK_DISTANCE = 0.5f;
         
         [SerializeField]
-        private List<DamageBehaviour> _damageBehaviours = new(); // not instantiated because there is no persistent state needed
+        private List<DamageBehaviour> _damageBehaviours = new(); // not instantiated because there is no persistent state
         
         [SerializeField]
         private LayerMask _collisionMask;
