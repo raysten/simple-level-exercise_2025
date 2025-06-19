@@ -56,6 +56,7 @@ namespace DependencyInjection
             BindInterfacesTo<PlayerMovement>();
             BindInterfacesTo<PlayerVerticalMovement>();
             BindInterfacesTo<PlayerHorizontalSpeed>();
+            BindInterfacesTo<PlayerFlyingStatus>();
             
             BindInterfacesAndSelfTo<PlayerRotation>();
         }

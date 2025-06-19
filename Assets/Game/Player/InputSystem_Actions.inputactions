@@ -94,6 +94,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Fly",
+                    "type": "Button",
+                    "id": "4f5241c4-f287-43d8-b63f-7dd290a797ba",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "FlyUpDown",
+                    "type": "Value",
+                    "id": "bce4c602-d8c1-4dca-8255-7377d70d3bd2",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -492,6 +510,50 @@
                     "action": "AlternativeAttack",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a51f91bc-fd1a-41b9-9dc5-f993a77774ae",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Fly",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "1D Axis",
+                    "id": "0c8985d8-d3c3-454a-b0ac-ac901b3a4b8d",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FlyUpDown",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "1439bfb3-d38e-47e5-b6c2-e67db33c8a03",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "FlyUpDown",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "6c39e5c8-636f-4fa3-8288-5684502d9065",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "FlyUpDown",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         },

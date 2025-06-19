@@ -57,6 +57,8 @@ namespace PlayerStateMachine
         {
             _transitions.Add(_transitionFactory.Create<TransitionFromGroundedToFalling>());
             _transitions.Add(_transitionFactory.Create<TransitionFromFallingToGrounded>());
+            _transitions.Add(_transitionFactory.Create<TransitionFromAnyToFlying>());
+            _transitions.Add(_transitionFactory.Create<TransitionFromFlyingToFalling>());
         }
 
         private void FixedUpdate()

@@ -38,7 +38,6 @@ namespace PlayerStateMachine.States
 
         public override void StateEntered()
         {
-            // _playerFacade.DebugDisplay.ShowMessage(nameof(PlayerGroundedState));
             _verticalMovement.ResetToDefaultGravity();
         }
 

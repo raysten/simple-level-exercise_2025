@@ -2,8 +2,9 @@
 {
     public enum EPlayerState
     {
-        Grounded = 0,
-        Falling = 1,
-        // Flying = 2
+        Any = 0,
+        Grounded = 1,
+        Falling = 2,
+        Flying = 3
     }
 }

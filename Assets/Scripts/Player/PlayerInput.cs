@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 namespace Player
 {
-    public class PlayerInput : IHorizontalInput, ISprintInput, IJumpInput, IMouseInput, IAttackInput
+    public class PlayerInput : IHorizontalInput, ISprintInput, IJumpInput, IMouseInput, IAttackInput, IFlyingInput
     {
         private const string PLAYER_MAP_ID = "Player";
 
@@ -17,6 +17,9 @@ namespace Player
         private InputAction _sprintAction;
         private InputAction _attackAction;
         private InputAction _alternativeAttackAction;
+        private InputAction _flyInputAction;
+        private InputAction _flyUpDownInputAction;
+        private Vector2 _flyUpDownInput;
 
         public Vector2 HorizontalInputRaw => _horizontalInput;
         public Vector3 HorizontalInput => new Vector3(_horizontalInput.x, 0f, _horizontalInput.y).normalized;
@@ -25,6 +28,8 @@ namespace Player
         public bool IsSprintHeld { get; private set; }
         public bool IsAttackPressed { get; private set; }
         public bool IsAlternativeAttackPressed { get; private set; }
+        public bool IsFlyPressed { get; private set; }
+        public float FlyUpDownInput { get; private set; }
     
         public PlayerInput(IInputAsset inputAsset, IGameInitializer initializer, IUpdateProvider updateProvider)
         {
@@ -59,6 +64,8 @@ namespace Player
             _sprintAction = InputSystem.actions.FindAction("Sprint");
             _attackAction = InputSystem.actions.FindAction("Attack");
             _alternativeAttackAction = InputSystem.actions.FindAction("AlternativeAttack");
+            _flyInputAction = InputSystem.actions.FindAction("Fly");
+            _flyUpDownInputAction = InputSystem.actions.FindAction("FlyUpDown");
         }
     
         private void Update()
@@ -69,6 +76,8 @@ namespace Player
             IsSprintHeld = _sprintAction.IsPressed();
             IsAttackPressed = _attackAction.triggered;
             IsAlternativeAttackPressed = _alternativeAttackAction.triggered;
+            IsFlyPressed = _flyInputAction.triggered;;
+            FlyUpDownInput = _flyUpDownInputAction.ReadValue<float>();
         }
     }
 }
