@@ -9,7 +9,7 @@ namespace Shooting
     {
         public override void DealDamage(RaycastHit hit, float damageMultiplier)
         {
-            if (hit.transform.TryGetComponent(out Damageable damageable))
+            if (hit.transform.TryGetComponent(out IDamageable damageable))
             {
                 damageable.TakeDamage(_damage * damageMultiplier);
             }

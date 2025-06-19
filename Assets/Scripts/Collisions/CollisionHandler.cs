@@ -2,7 +2,7 @@
 
 namespace Collisions
 {
-    public class CollisionHandler : ICollisionHandler
+    public class CollisionHandler
     {
         private const float SKIN_WIDTH = 0.02f;
         private const int MAX_ITERATIONS = 10;
