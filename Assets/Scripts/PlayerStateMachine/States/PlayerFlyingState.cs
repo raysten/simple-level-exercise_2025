@@ -7,10 +7,10 @@ namespace PlayerStateMachine.States
     {
         private readonly IVerticalMovement _verticalMovement;
         private readonly IHorizontalInput _horizontalInput;
-        private Transform _transform;
-        private IMove _move;
-        private IHorizontalSpeed _horizontalSpeed;
-        private IFlyingInput _flyingInput;
+        private readonly Transform _transform;
+        private readonly IMove _move;
+        private readonly IHorizontalSpeed _horizontalSpeed;
+        private readonly IFlyingInput _flyingInput;
         public override EPlayerState State => EPlayerState.Flying;
 
         public PlayerFlyingState(
@@ -42,7 +42,7 @@ namespace PlayerStateMachine.States
         {
             var playerInput = _horizontalInput.HorizontalInput;
             var horizontalInput = _transform.TransformDirection(playerInput);
-            var speed = _horizontalSpeed.CalculateSpeedWhenFalling();
+            var speed = _horizontalSpeed.CalculateFlyingSpeed();
             
             return horizontalInput * (speed * Time.fixedDeltaTime);
         }

@@ -34,5 +34,10 @@ namespace Player
             
             return _settings.HorizontalSpeedWhenFalling * powerupsMultiplier;
         }
+
+        public float CalculateFlyingSpeed()
+        {
+            return CalculateGroundedSpeed();
+        }
     }
 }

@@ -4,5 +4,6 @@
     {
         float CalculateGroundedSpeed();
         float CalculateSpeedWhenFalling();
+        float CalculateFlyingSpeed();
     }
 }
