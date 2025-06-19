@@ -12,9 +12,6 @@ namespace Player
         private CapsuleCollider _capsuleCollider;
 
         [SerializeField]
-        private float _skinWidth = 0.05f;
-
-        [SerializeField]
         private LayerMask _collisionMask;
     
         private CollisionHandler _collisionHandler;
