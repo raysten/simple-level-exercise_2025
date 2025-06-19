@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using Framework;
-using Player;
 using PlayerStateMachine.States;
 using PlayerStateMachine.Transitions;
-using UnityEngine;
 
 namespace PlayerStateMachine
 {
@@ -74,7 +72,7 @@ namespace PlayerStateMachine
         {
             foreach (var transition in _transitions)
             {
-                var transitionEvaluation = transition.CanChangeState(_currentState, _stateFactory);
+                var transitionEvaluation = transition.CanChangeState(_currentState);
                 
                 if (transitionEvaluation.canChange)
                 {
