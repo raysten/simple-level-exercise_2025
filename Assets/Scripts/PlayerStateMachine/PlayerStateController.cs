@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Framework;
+using Player;
 using PlayerStateMachine.States;
 using PlayerStateMachine.Transitions;
 
@@ -13,13 +14,15 @@ namespace PlayerStateMachine
         
         private readonly PlayerStateFactory _stateFactory;
         private readonly TransitionFactory _transitionFactory;
+        private IPlayerEvents _playerEvents;
 
         public PlayerStateController(
             PlayerStateFactory stateFactory, TransitionFactory transitionFactory, IGameInitializer initializer,
-            IUpdateProvider updateProvider)
+            IUpdateProvider updateProvider, IPlayerEvents playerEvents)
         {
             _stateFactory = stateFactory;
             _transitionFactory = transitionFactory;
+            _playerEvents = playerEvents;
             
             initializer.OnGameInitialized += Initialize;
 
@@ -87,6 +90,8 @@ namespace PlayerStateMachine
             _currentState.StateExited();
             _currentState = newState;
             _currentState.StateEntered();
+            
+            _playerEvents.InvokePlayerStateChanged(_currentState.ToString());
         }
     }
 }

@@ -3,7 +3,6 @@ using Platforms;
 using Player;
 using Settings;
 using UnityEngine;
-using Utilities;
 
 namespace PlayerStateMachine.States
 {
@@ -113,5 +112,7 @@ namespace PlayerStateMachine.States
 
         public override void StateExited()
         { }
+
+        public override string ToString() => nameof(PlayerGroundedState);
     }
 }

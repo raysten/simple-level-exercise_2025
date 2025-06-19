@@ -11,5 +11,7 @@
         public abstract void UpdateState();
 
         public abstract void StateExited();
+
+        public abstract override string ToString();
     }
 }

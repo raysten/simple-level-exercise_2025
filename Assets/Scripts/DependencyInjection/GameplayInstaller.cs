@@ -1,4 +1,5 @@
 using Framework;
+using Player;
 using UnityEngine;
 
 namespace DependencyInjection
@@ -15,6 +16,7 @@ namespace DependencyInjection
         {
             BindInterfacesFromPrefab(_updater);
             BindInterfacesFromInstance(_initializer);
+            BindInterfacesTo<PlayerEventBus>();
         }
     }
 }

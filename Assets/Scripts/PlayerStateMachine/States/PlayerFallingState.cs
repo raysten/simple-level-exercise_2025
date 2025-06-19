@@ -53,5 +53,7 @@ namespace PlayerStateMachine.States
 
         public override void StateExited()
         { }
+
+        public override string ToString() => nameof(PlayerFallingState);
     }
 }
