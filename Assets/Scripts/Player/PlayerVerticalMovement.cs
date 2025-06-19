@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using Player.Powerups;
+using UnityEngine;
 
 namespace Player
 {
@@ -9,10 +11,18 @@ namespace Player
 
         [SerializeField]
         private float _jumpForce = 7f;
+        
+        [SerializeField]
+        private PowerupsController _powerupsController;
 
         private float _velocity;
 
         public Vector3 VerticalMovementDelta => Vector3.up * _velocity * Time.fixedDeltaTime;
+
+        private void Reset()
+        {
+            _powerupsController = GetComponent<PowerupsController>();
+        }
 
         public void ApplyGravity()
         {
@@ -26,7 +36,8 @@ namespace Player
 
         public void Jump()
         {
-            ChangeVelocity(_jumpForce);
+            var powerupsMultiplier = _powerupsController.FindSumOfMultipliersOf(EPlayerStatistic.Jump);
+            ChangeVelocity(_jumpForce * powerupsMultiplier);
         }
 
         private void ChangeVelocity(float velocity)

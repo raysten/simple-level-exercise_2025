@@ -25,6 +25,9 @@ namespace Player
         private PlayerVerticalMovement _playerVerticalMovement;
         
         [SerializeField]
+        private PlayerHorizontalSpeed _playerHorizontalSpeed;
+        
+        [SerializeField]
         private PowerupsController _powerupsController;
     
         [SerializeField]
@@ -44,6 +47,8 @@ namespace Player
         public PlayerInput PlayerInput => _playerInput;
 
         public PlayerVerticalMovement PlayerVerticalMovement => _playerVerticalMovement;
+        
+        public PlayerHorizontalSpeed PlayerHorizontalSpeed => _playerHorizontalSpeed;
     
         public PlayerSettings PlayerSettings => _playerSettings;
         
@@ -58,6 +63,7 @@ namespace Player
             _playerGroundCheck = GetComponent<PlayerGroundCheck>();
             _playerInput = GetComponent<PlayerInput>();
             _playerVerticalMovement = GetComponent<PlayerVerticalMovement>();
+            _playerHorizontalSpeed = GetComponent<PlayerHorizontalSpeed>();
             _powerupsController = GetComponent<PowerupsController>();
             _playerSettings = GetComponent<PlayerSettings>();
         }

@@ -29,7 +29,7 @@ namespace PlayerStateMachine.States
         {
             var playerInput = _playerFacade.PlayerInput.HorizontalInput;
             var horizontalInput = _playerFacade.transform.TransformDirection(playerInput);
-            var speed = _playerFacade.PlayerSettings.HorizontalSpeedWhenFalling;
+            var speed = _playerFacade.PlayerHorizontalSpeed.CalculateSpeedWhenFalling();
             
             return horizontalInput * (speed * Time.fixedDeltaTime);
         }
