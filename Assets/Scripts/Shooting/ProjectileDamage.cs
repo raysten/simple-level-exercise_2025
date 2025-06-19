@@ -1,4 +1,4 @@
-﻿using Damageables;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Shooting
@@ -8,11 +8,11 @@ namespace Shooting
         private const float CHECK_DISTANCE = 0.5f;
         
         [SerializeField]
-        private DamageBehaviour _damageBehaviour;
+        private List<DamageBehaviour> _damageBehaviours = new(); // not instantiated because there is no persistent state needed
         
         [SerializeField]
         private LayerMask _collisionMask;
-        
+
         [SerializeField]
         private Projectile _projectile;
 
@@ -31,13 +31,16 @@ namespace Shooting
             if (Physics.Raycast(transform.position, transform.forward, out var hit, CHECK_DISTANCE, _collisionMask,
                                 QueryTriggerInteraction.Ignore))
             {
-                var damageable = hit.transform.GetComponent<IDamageable>();
+                TryDealDamage(hit);
+                _projectile.Despawn();
+            }
+        }
 
-                if (damageable != null)
-                {
-                    damageable.TakeDamage(_damage);
-                    _projectile.Despawn();
-                }
+        private void TryDealDamage(RaycastHit hit)
+        {
+            foreach (var damageBehaviour in _damageBehaviours)
+            {
+                damageBehaviour.DealDamage(hit);
             }
         }
     }
