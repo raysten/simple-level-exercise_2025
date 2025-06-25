@@ -2,9 +2,6 @@
 
 namespace Collisions
 {
-    /// <summary>
-    /// Such static class is perfectly fine as a utility, it doesn't keep or modify any state just enables code reuse
-    /// </summary>
     public static class PhysicsUtility
     {
         public static (Vector3, Vector3) CalculateCapsulePoints(Transform transform, CapsuleCollider capsuleCollider)
