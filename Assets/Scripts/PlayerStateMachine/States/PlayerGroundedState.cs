@@ -19,7 +19,7 @@ namespace PlayerStateMachine.States
         private readonly CapsuleCollider _capsuleCollider;
         private readonly IJumpInput _jumpInput;
 
-        public override EPlayerState State => EPlayerState.Grounded;
+        public  sealed override EPlayerState State => EPlayerState.Grounded;
 
         public PlayerGroundedState(IMovementLayers movementLayers, IVerticalMovement verticalMovement, IMove move,
                                    Transform transform, IHorizontalInput horizontalInput,
@@ -36,12 +36,12 @@ namespace PlayerStateMachine.States
             _jumpInput = jumpInput;
         }
 
-        public override void StateEntered()
+        public sealed override void StateEntered()
         {
             _verticalMovement.ResetToDefaultGravity();
         }
 
-        public override void FixedUpdateState()
+        public sealed override void FixedUpdateState()
         {
             var platformVelocity = FindMovingPlatformsVelocity();
             var horizontalMovement = CalculateHorizontalMovement() + platformVelocity.Horizontal();
@@ -101,7 +101,7 @@ namespace PlayerStateMachine.States
             _verticalMovement.ResetToDefaultGravity();
         }
 
-        public override void UpdateState()
+        public sealed override void UpdateState()
         {
             if (_jumpInput.IsJumpPressed)
             {
@@ -109,9 +109,9 @@ namespace PlayerStateMachine.States
             }
         }
 
-        public override void StateExited()
+        public sealed override void StateExited()
         { }
 
-        public override string ToString() => nameof(PlayerGroundedState);
+        public sealed override string ToString() => nameof(PlayerGroundedState);
     }
 }

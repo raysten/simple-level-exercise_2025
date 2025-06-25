@@ -7,7 +7,7 @@ namespace PlayerStateMachine.Transitions
     {
         private readonly IFlyingStatus _flyingStatus;
 
-        protected override EPlayerState From => EPlayerState.Flying;
+        protected sealed override EPlayerState From => EPlayerState.Flying;
         
         public TransitionFromFlyingToFalling(PlayerStateFactory stateFactory, IFlyingStatus flyingStatus)
             : base(stateFactory)
@@ -15,7 +15,7 @@ namespace PlayerStateMachine.Transitions
             _flyingStatus = flyingStatus;
         }
 
-        public override (bool canChange, PlayerStateBase newState) CanChangeState(PlayerStateBase currentState)
+        public sealed override (bool canChange, PlayerStateBase newState) CanChangeState(PlayerStateBase currentState)
         { 
             var canChange = false;
             var newState = currentState;

@@ -7,14 +7,14 @@ namespace PlayerStateMachine.Transitions
     {
         private IFlyingStatus _flyingStatus;
         
-        protected override EPlayerState From => EPlayerState.Any;
+        protected sealed override EPlayerState From => EPlayerState.Any;
         
         public TransitionFromAnyToFlying(PlayerStateFactory stateFactory, IFlyingStatus flyingStatus) : base(stateFactory)
         {
             _flyingStatus = flyingStatus;
         }
 
-        public override (bool canChange, PlayerStateBase newState) CanChangeState(PlayerStateBase currentState)
+        public sealed override (bool canChange, PlayerStateBase newState) CanChangeState(PlayerStateBase currentState)
         {
             var newState = currentState;
             var isFlying = _flyingStatus.IsFlying;

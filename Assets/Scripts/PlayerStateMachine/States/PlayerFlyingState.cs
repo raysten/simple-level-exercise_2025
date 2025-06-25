@@ -11,7 +11,7 @@ namespace PlayerStateMachine.States
         private readonly IMove _move;
         private readonly IHorizontalSpeed _horizontalSpeed;
         private readonly IFlyingInput _flyingInput;
-        public override EPlayerState State => EPlayerState.Flying;
+        public sealed override EPlayerState State => EPlayerState.Flying;
 
         public PlayerFlyingState(
             IVerticalMovement verticalMovement, IHorizontalInput horizontalInput, Transform transform, IMove move,
@@ -25,12 +25,12 @@ namespace PlayerStateMachine.States
             _flyingInput = flyingInput;
         }
         
-        public override void StateEntered()
+        public sealed override void StateEntered()
         {
             _verticalMovement.ZeroGravity();
         }
 
-        public override void FixedUpdateState()
+        public sealed override void FixedUpdateState()
         {
             var horizontalMovement = CalculateHorizontalMovement();
             var verticalMovement = CalculateVerticalMovement();
@@ -55,14 +55,14 @@ namespace PlayerStateMachine.States
             return new Vector3(0f, input * speed * Time.fixedDeltaTime, 0f);
         }
 
-        public override void UpdateState()
+        public sealed override void UpdateState()
         { }
 
-        public override void StateExited()
+        public sealed override void StateExited()
         {
             _verticalMovement.ResetToDefaultGravity();
         }
 
-        public override string ToString() => nameof(PlayerFlyingState);
+        public sealed override string ToString() => nameof(PlayerFlyingState);
     }
 }

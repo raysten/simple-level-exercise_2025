@@ -6,7 +6,7 @@ namespace PlayerStateMachine.Transitions
     public class TransitionFromGroundedToFalling : PlayerStateTransition
     {
         private readonly IGroundedStatus _groundedStatus;
-        protected override EPlayerState From => EPlayerState.Grounded;
+        protected sealed override EPlayerState From => EPlayerState.Grounded;
 
         public TransitionFromGroundedToFalling(IGroundedStatus groundedStatus, PlayerStateFactory stateFactory)
             : base(stateFactory)
@@ -14,7 +14,7 @@ namespace PlayerStateMachine.Transitions
             _groundedStatus = groundedStatus;
         }
 
-        public override (bool canChange, PlayerStateBase newState) CanChangeState(PlayerStateBase currentState)
+        public sealed override (bool canChange, PlayerStateBase newState) CanChangeState(PlayerStateBase currentState)
         {
             var canChange = false;
             var newState = currentState;

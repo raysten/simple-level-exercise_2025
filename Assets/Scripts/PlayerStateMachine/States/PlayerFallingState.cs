@@ -11,7 +11,7 @@ namespace PlayerStateMachine.States
         private readonly Transform _transform;
         private readonly IHorizontalSpeed _playerHorizontalSpeed;
 
-        public override EPlayerState State => EPlayerState.Falling;
+        public sealed override EPlayerState State => EPlayerState.Falling;
         
         public PlayerFallingState(
             IVerticalMovement verticalMovement, IMove movement, IHorizontalInput horizontalInput, Transform  transform,
@@ -24,10 +24,10 @@ namespace PlayerStateMachine.States
             _playerHorizontalSpeed = playerHorizontalSpeed;
         }
 
-        public override void StateEntered()
+        public sealed override void StateEntered()
         { }
 
-        public override void FixedUpdateState()
+        public sealed override void FixedUpdateState()
         {
             _verticalMovement.ApplyGravity();
             
@@ -46,12 +46,12 @@ namespace PlayerStateMachine.States
             return horizontalInput * (speed * Time.fixedDeltaTime);
         }
 
-        public override void UpdateState()
+        public sealed override void UpdateState()
         { }
 
-        public override void StateExited()
+        public sealed override void StateExited()
         { }
 
-        public override string ToString() => nameof(PlayerFallingState);
+        public sealed override string ToString() => nameof(PlayerFallingState);
     }
 }
