@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Framework
 {
+    /// <summary>
+    /// Very simple initializer which in a real game would work with loading screens, loading and unloading scenes etc
+    /// </summary>
     public class GameInitializer : MonoBehaviour, IGameInitializer
     {
         public event Action OnGameInitialized = EventUtility.Empty;
@@ -13,7 +16,7 @@ namespace Framework
             OnGameInitialized.Invoke();
         }
 
-        private void OnDestroy()
+        private void OnApplicationQuit()
         {
             OnGameDeinitialized.Invoke();
         }
