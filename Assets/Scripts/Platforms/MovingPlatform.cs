@@ -7,6 +7,9 @@ namespace Platforms
         private const float MIN_DISTANCE_TO_DESTINATION = 0.1f;
         
         [SerializeField]
+        private Rigidbody _rigidbody;
+        
+        [SerializeField]
         private Vector3 _endPosition;
 
         [SerializeField]
@@ -31,7 +34,7 @@ namespace Platforms
         private void Move()
         {
             Velocity = CalculatePlatformVelocity();
-            transform.position += Velocity;
+            _rigidbody.MovePosition(_rigidbody.position + Velocity);
 
             if (Vector3.SqrMagnitude(transform.position - _currentDestination) <= MIN_DISTANCE_TO_DESTINATION)
             {
