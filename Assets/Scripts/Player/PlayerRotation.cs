@@ -8,15 +8,15 @@ namespace Player
     {
         private readonly Rigidbody _rigidbody;
         private readonly IMouseInput _mouseInput;
-        private readonly IMouseSettings _mouseSettings;
+        private readonly IRotationSettings _rotationSettings;
 
         public PlayerRotation(
             IGameInitializer initializer, IUpdateProvider updateProvider, Rigidbody rigidbody, IMouseInput mouseInput,
-            IMouseSettings mouseSettings)
+            IRotationSettings rotationSettings)
         {
             _rigidbody = rigidbody;
             _mouseInput = mouseInput;
-            _mouseSettings = mouseSettings;
+            _rotationSettings = rotationSettings;
             
             initializer.OnGameInitialized += Initialize;
 
@@ -40,8 +40,12 @@ namespace Player
 
         private void FixedUpdate()
         {
-            var mouseSensitivity = _mouseSettings.MouseSensitivity;
-            var deltaRotation = Quaternion.Euler(0f, _mouseInput.MouseInput.x * mouseSensitivity * Time.fixedDeltaTime, 0f);
+            var mouseSensitivity = _rotationSettings.MouseSensitivity;
+            var yRotation = _mouseInput.MouseInput.x * mouseSensitivity * Time.fixedDeltaTime;
+            var yRotationClamp = _rotationSettings.YAxisRotationClamp;
+            var yRotationClamped = Mathf.Clamp(yRotation, -yRotationClamp, yRotationClamp);
+            var deltaRotation = Quaternion.Euler(0f, yRotationClamped, 0f);
+            
             _rigidbody.MoveRotation(_rigidbody.rotation * deltaRotation);
         }
     }

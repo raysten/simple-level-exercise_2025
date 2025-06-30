@@ -5,7 +5,7 @@ namespace Settings
 {
     [CreateAssetMenu(fileName = nameof(PlayerConfig), menuName = "Settings/" + nameof(PlayerConfig))]
     public class PlayerConfig : ScriptableObject, IMovementLayers, IPowerupLayerMask, IVerticalMovementConfig,
-                                IInputAsset, IHorizontalSpeedConfig, IMouseSettings, IGroundCheckConfig
+                                IInputAsset, IHorizontalSpeedConfig, IRotationSettings, IGroundCheckConfig
     {
         [SerializeField]
         private InputActionAsset _input;
@@ -39,6 +39,9 @@ namespace Settings
         
         [SerializeField]
         private float _mouseSensitivity = 30f;
+
+        [SerializeField]
+        private float _yAxisRotationClamp = 15f;
         
         [Header("Ground check"), Space]
         [SerializeField]
@@ -64,6 +67,7 @@ namespace Settings
         public float SprintSpeed => _sprintSpeed;
         public float HorizontalSpeedWhenFalling => _horizontalMovementSpeed * _horizontalSpeedMultiplierWhenFalling;
         public float MouseSensitivity => _mouseSensitivity;
+        public float YAxisRotationClamp => _yAxisRotationClamp;
         
         public LayerMask GroundCheckLayerMask => _groundCheckLayerMask;
         public float GroundCheckOffsetIntoCapsule => _groundCheckOffsetIntoCapsule;
