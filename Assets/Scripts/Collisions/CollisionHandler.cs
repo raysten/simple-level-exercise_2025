@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using Settings;
+using UnityEngine;
 
 namespace Collisions
 {
-    public class CollisionHandler
+    public class CollisionHandler : ICollisionHandler
     {
         private const float SKIN_WIDTH = 0.02f;
         private const int MAX_ITERATIONS = 10;
@@ -11,14 +12,14 @@ namespace Collisions
 
         private readonly CapsuleCollider _capsuleCollider;
         private readonly Transform _transform;
-        private readonly LayerMask _collisionMask;
+        private readonly IMovementLayers _collisionConfig;
 
         public CollisionHandler(
-            Transform transform, CapsuleCollider capsuleCollider, LayerMask collisionMask)
+            Transform transform, CapsuleCollider capsuleCollider, IMovementLayers collisionConfig)
         {
-            _collisionMask = collisionMask;
             _transform = transform;
             _capsuleCollider = capsuleCollider;
+            _collisionConfig = collisionConfig;
         }
 
         /// <summary>
@@ -74,9 +75,10 @@ namespace Collisions
         {
             var radius = _capsuleCollider.radius;
             var (point1, point2) = PhysicsUtility.CalculateCapsulePoints(_transform, _capsuleCollider, currentPosition);
+            var collisionMask = _collisionConfig.PlayerMovementCollisionMask;
         
             return Physics.CapsuleCast(point1, point2, radius, direction.normalized, out hit, 
-                                       direction.magnitude + SKIN_WIDTH, _collisionMask,
+                                       direction.magnitude + SKIN_WIDTH, collisionMask,
                                        QueryTriggerInteraction.Ignore);
         }
 

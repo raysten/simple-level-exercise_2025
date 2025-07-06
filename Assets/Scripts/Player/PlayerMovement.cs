@@ -1,5 +1,4 @@
 using Collisions;
-using Settings;
 using UnityEngine;
 
 namespace Player
@@ -8,17 +7,14 @@ namespace Player
     {
         private readonly Transform _transform;
         private readonly Rigidbody _rigidbody;
-
-        private readonly CollisionHandler _collisionHandler;
+        private readonly ICollisionHandler _collisionHandler;
 
         public PlayerMovement(
-            Transform transform, Rigidbody rigidbody, CapsuleCollider capsuleCollider,
-            IMovementLayers collisionConfig)
+            Transform transform, Rigidbody rigidbody, ICollisionHandler collisionHandler)
         {
             _transform = transform;
             _rigidbody = rigidbody;
-
-            _collisionHandler = new CollisionHandler(_transform, capsuleCollider, collisionConfig.PlayerMovementCollisionMask);
+            _collisionHandler = collisionHandler;
         }
 
         public void Move(Vector3 horizontalMovement, Vector3 verticalMovement)

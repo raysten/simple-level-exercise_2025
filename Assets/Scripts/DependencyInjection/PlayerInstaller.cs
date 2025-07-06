@@ -1,3 +1,4 @@
+using Collisions;
 using Player;
 using Player.Powerups;
 using PlayerStateMachine;
@@ -53,6 +54,8 @@ namespace DependencyInjection
 
         private void BindMovement()
         {
+            BindInterfacesTo<CollisionHandler>();
+            
             BindInterfacesTo<PlayerMovement>();
             BindInterfacesTo<PlayerVerticalMovement>();
             BindInterfacesTo<PlayerHorizontalSpeed>();
