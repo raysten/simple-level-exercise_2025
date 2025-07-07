@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace PlayerStateMachine.States
 {
-    public class PlayerFallingState : PlayerStateBase
+    public sealed class PlayerFallingState : PlayerStateBase
     {
         private readonly IVerticalMovement _verticalMovement;
         private readonly IMove _movement;
@@ -11,7 +11,7 @@ namespace PlayerStateMachine.States
         private readonly Transform _transform;
         private readonly IHorizontalSpeed _playerHorizontalSpeed;
 
-        public sealed override EPlayerState State => EPlayerState.Falling;
+        public override EPlayerState State => EPlayerState.Falling;
         
         public PlayerFallingState(
             IVerticalMovement verticalMovement, IMove movement, IHorizontalInput horizontalInput, Transform  transform,
@@ -24,10 +24,10 @@ namespace PlayerStateMachine.States
             _playerHorizontalSpeed = playerHorizontalSpeed;
         }
 
-        public sealed override void StateEntered()
+        public override void StateEntered()
         { }
 
-        public sealed override void FixedUpdateState()
+        public override void FixedUpdateState()
         {
             _verticalMovement.ApplyGravity();
             
@@ -46,12 +46,12 @@ namespace PlayerStateMachine.States
             return horizontalInput * (speed * Time.fixedDeltaTime);
         }
 
-        public sealed override void UpdateState()
+        public override void UpdateState()
         { }
 
-        public sealed override void StateExited()
+        public override void StateExited()
         { }
 
-        public sealed override string ToString() => nameof(PlayerFallingState);
+        public override string ToString() => nameof(PlayerFallingState);
     }
 }

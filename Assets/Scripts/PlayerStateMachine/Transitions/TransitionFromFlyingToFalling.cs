@@ -3,11 +3,11 @@ using PlayerStateMachine.States;
 
 namespace PlayerStateMachine.Transitions
 {
-    public class TransitionFromFlyingToFalling : PlayerStateTransition
+    public sealed class TransitionFromFlyingToFalling : PlayerStateTransition
     {
         private readonly IFlyingStatus _flyingStatus;
 
-        protected sealed override EPlayerState From => EPlayerState.Flying;
+        protected override EPlayerState From => EPlayerState.Flying;
         
         public TransitionFromFlyingToFalling(PlayerStateFactory stateFactory, IFlyingStatus flyingStatus)
             : base(stateFactory)
@@ -15,7 +15,7 @@ namespace PlayerStateMachine.Transitions
             _flyingStatus = flyingStatus;
         }
 
-        public sealed override (bool canChange, PlayerStateBase newState) CanChangeState(PlayerStateBase currentState)
+        public override (bool canChange, PlayerStateBase newState) CanChangeState(PlayerStateBase currentState)
         { 
             var canChange = false;
             var newState = currentState;

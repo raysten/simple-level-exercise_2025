@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace PlayerStateMachine.States
 {
-    public class PlayerFlyingState : PlayerStateBase
+    public sealed class PlayerFlyingState : PlayerStateBase
     {
         private readonly IVerticalMovement _verticalMovement;
         private readonly IHorizontalInput _horizontalInput;
@@ -11,7 +11,8 @@ namespace PlayerStateMachine.States
         private readonly IMove _move;
         private readonly IHorizontalSpeed _horizontalSpeed;
         private readonly IFlyingInput _flyingInput;
-        public sealed override EPlayerState State => EPlayerState.Flying;
+        
+        public override EPlayerState State => EPlayerState.Flying;
 
         public PlayerFlyingState(
             IVerticalMovement verticalMovement, IHorizontalInput horizontalInput, Transform transform, IMove move,
@@ -25,12 +26,12 @@ namespace PlayerStateMachine.States
             _flyingInput = flyingInput;
         }
         
-        public sealed override void StateEntered()
+        public override void StateEntered()
         {
             _verticalMovement.ZeroGravity();
         }
 
-        public sealed override void FixedUpdateState()
+        public override void FixedUpdateState()
         {
             var horizontalMovement = CalculateHorizontalMovement();
             var verticalMovement = CalculateVerticalMovement();
@@ -55,14 +56,14 @@ namespace PlayerStateMachine.States
             return new Vector3(0f, input * speed * Time.fixedDeltaTime, 0f);
         }
 
-        public sealed override void UpdateState()
+        public override void UpdateState()
         { }
 
-        public sealed override void StateExited()
+        public override void StateExited()
         {
             _verticalMovement.ResetToDefaultGravity();
         }
 
-        public sealed override string ToString() => nameof(PlayerFlyingState);
+        public override string ToString() => nameof(PlayerFlyingState);
     }
 }
